@@ -10,7 +10,8 @@
         'app.services',
         'angular-md5',
         'ngCookies',
-        'ngTable'
+        'ngTable',
+        'ui.bootstrap'
     ])
 
         .config(['$translateProvider', function ($translateProvider) {
@@ -33,18 +34,19 @@
                     url: '/app',
                     templateUrl: 'pages/app.html'
                 })
-                .state('app.transcodingList', {
-                    url: '/transcodingList',
-                    templateUrl: 'pages/transcodingList.html'
+                .state('app.appsGroup', {
+                    url: '/appsGroup',
+                    templateUrl: 'pages/appsGroup.html'
                 })
-                .state('app.notEditedList', {
-                    url: '/notEditedList',
-                    templateUrl: 'pages/notEditedList.html'
+                .state('app.appsGroup.appsGroupInfo', {
+                    url: '/appsGroupInfo?groupId',
+                    templateUrl: 'pages/appsGroupInfo.html'
                 })
-                .state('app.editedList', {
-                    url: '/editedList',
-                    templateUrl: 'pages/editedList.html'
+                .state('app.appsWarehouse', {
+                    url: '/appsWarehouse',
+                    templateUrl: 'pages/appsWarehouse.html'
                 })
+
         }])
 
         .constant('CONFIG', {

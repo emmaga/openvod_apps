@@ -1,0 +1,15 @@
+<div ng-controller="appsGroupController as app" ng-init="appsGroup.init()">
+    <!-- 左侧菜单 -->
+    <div class="nav-left ">
+        <ul class="nav nav-stacked">
+            <li class="nav-header active" ng-repeat="item in appsGroup.groups" >
+                <a class="theme-hover"  ui-sref-active="active" ui-sref="app.appsGroup.appsGroupInfo({groupId:{{item.groupId}}})">
+                    {{item.groupName}}
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 右侧 -->
+    <ui-view></ui-view>
+</div>
