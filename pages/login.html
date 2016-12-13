@@ -1,0 +1,8 @@
+<div ng-controller="loginController as login" ng-init="login.init()">
+    <form name="loginForm" ng-submit="loginForm.$valid && login.login()">
+        <input ng-model="login.userName" type="text" placeholder="Username" required>
+        <input ng-model="login.password" type="password" placeholder="Password" required>
+        <button class="login-submit">Sign In</button>
+        <div ng-show="login.loading">loading...</div>
+    </form>
+</div>

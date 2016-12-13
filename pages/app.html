@@ -1,0 +1,42 @@
+<div ng-controller="appController as app" ng-init="app.init()">
+
+    <!--头部-->
+    <div id="top-nav" class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand">应用组合</a>
+            </div>
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand">应用库</a>
+            </div>
+            <a ng-click="app.logout()">log out</a>
+        </div>
+    </div>
+    <!--头部-->
+
+    <!--body-->
+    <div class="container-fluid">
+        <div class="row">
+            <!--pages-->
+            <div ng-show="app.showUploadList" ng-include="app.uploadListUrl" class="autoscroll"></div>
+            <ui-view ng-show="!app.showUploadList"></ui-view>
+            <!--pages-->
+
+        </div>
+    </div>
+    <!--body-->
+
+    <!--弹窗-->
+    <div ng-include="app.maskUrl" class="autoscroll"></div>
+    <!--弹窗-->
+</div>
