@@ -1,3 +1,40 @@
-<div ng-controller="appsGroupInfoController as app" ng-init="appsGroupInfo.init()">
+<div ng-controller="appsGroupInfoController as appsGroupInfo" ng-init="appsGroupInfo.init()">
+    <div class="modal-header">
+        <h3>应用组合详情</h3>
+        <div>
+            <form>
+                <button type="submit" class="btn btn-primary">保存</button>
+            </form>
+        </div>
+    </div>
+    <div class="modal-body">
+        <h4>应用列表</h4>
+        <div class="right">
+            <button type="button" class="btn btn-primary" ng-click="appsGroupInfo.addApp()">添加</button>
+            <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+        <div class="modal-body">
+            <table class="table table-hover table-condensed" ng-table="appsGroupInfo.tableParams">
+                <tbody>
+                <tr>
+                    <td>应用名称</td>
+                    <td>属性一</td>
+                    <td>属性二</td>
+                    <td>属性三</td>
+                    <td><a ng-click="appsGroupInfo.deleteApp()">删除</a></td>
+                </tr>
+                <tr>
+                    <td>应用名称</td>
+                    <td>属性一</td>
+                    <td>属性二</td>
+                    <td>属性三</td>
+                    <td><a ng-click="appsGroupInfo.deleteApp()">删除</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-show="appsGroupInfo.loading">Loading...</div>
+        <div ng-show="appsGroupInfo.deleting">Deleting...</div>
+    </div>
 
 </div>
