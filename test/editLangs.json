@@ -1,0 +1,14 @@
+{
+  "editLangs": [
+    {
+      "name": "中文",
+      "code": "zh-CN",
+      "default": true
+    },
+    {
+      "name": "EN",
+      "code": "en-US",
+      "default": false
+    }
+  ]
+}

@@ -20,35 +20,36 @@
                 }
 
                 self.login = function () {
-                    $state.go('app');
                     self.loading = true;
 
                     var data = JSON.stringify({
                         username: self.userName,
                         password: md5.createHash(self.password)
                     })
-                    // $http({
-                    //     method: 'POST',
-                    //     url: util.getApiUrl('logon', '', 'server'),
-                    //     data: data
-                    // }).then(function successCallback(response) {
-                    //     var msg = response.data;
-                    //     if (msg.rescode == '200') {
-                    //         util.setParams('token', msg.token);
-                    //         self.getEditLangs();
-                    //     } else if (msg.rescode == "401") {
-                    //         alert('访问超时，请重新登录');
-                    //         $state.go('login')
-                    //     } else {
-                    //         alert(msg.rescode + ' ' + msg.errInfo);
-                    //     }
-                    // }, function errorCallback(response) {
-                    //     alert(response.status + ' 服务器出错');
-                    // }).finally(function (value) {
-                    //     self.loading = false;
-                    // });
+                    $http({
+                        method: 'POST',
+                        url: util.getApiUrl('logon', '', 'server'),
+                        data: data
+                    }).then(function successCallback(response) {
+                        var msg = response.data;
+                        if (msg.rescode == '200') {
+                            util.setParams('token', msg.token);
+                            self.getEditLangs();
+                        } else if (msg.rescode == "401") {
+                            alert('访问超时，请重新登录');
+                            $state.go('login')
+                        } else {
+                            alert(msg.rescode + ' ' + msg.errInfo);
+                        }
+                    }, function errorCallback(response) {
+                        alert(response.status + ' 服务器出错');
+                    }).finally(function (value) {
+                        self.loading = false;
+                    });
                 }
-                //
+                /**
+                 * 获取默认语言
+                 */
                 self.getEditLangs = function () {
                     $http({
                         method: 'GET',
@@ -68,6 +69,7 @@
             function ($http, $scope, $state, $stateParams, util, CONFIG) {
                 var self = this;
                 self.init = function () {
+                    self.loading = false;
                     self.isNavCollapsed = true;
                     $state.go('app.appsGroup')
                 }
