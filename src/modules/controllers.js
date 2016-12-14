@@ -185,6 +185,10 @@
                 self.init = function () {
                     self.groupId = $scope.app.maskParams.groupId;
                 }
+
+                self.cancel = function () {
+                    $scope.app.showHideMask(false);
+                };
             }
         ])
 
@@ -192,8 +196,83 @@
             function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
                 var self = this;
                 self.init = function () {
-
+                    self.loading = false;
+                    self.search()
                 }
+
+                /**
+                 * 获取应用列表
+                 */
+                self.search = function () {
+                    self.tableParams = new NgTableParams(
+                        {
+                            page: 1,
+                            count: 15,
+                            url: ''
+                        },
+                        {
+                            counts: false,
+                            getData: function (params) {
+                                var paramsUrl = params.url();
+                                var searchName = "";
+                                if (self.searchName) {
+                                    searchName = self.searchName;
+                                }
+                                var data = JSON.stringify({
+                                    action: "getAppList",
+                                    token: util.getParams('token'),
+                                    page: Number(paramsUrl.page),
+                                    count: Number(paramsUrl.count)
+                                })
+                                self.loading = true;
+                                self.noData = false;
+
+                                return $http({
+                                    method: 'POST',
+                                    url: util.getApiUrl('app', '', 'server'),
+                                    data: data
+                                }).then(function successCallback(response) {
+                                    var msg = response.data;
+                                    if (msg.rescode == '200') {
+                                        params.total(msg.data.appTotal);
+                                        self.apps = msg.data.appList;
+                                        return msg.data.appList;
+                                    } else if (msg.rescode == '401') {
+                                        alert('访问超时，请重新登录');
+                                        $location.path("pages/login.html");
+                                    } else {
+                                        alert('读取数据出错，' + msg.errInfo);
+                                    }
+                                }, function errorCallback(response) {
+                                    alert(response.status + ' 服务器出错');
+                                }).finally(function () {
+                                    self.loading = false;
+                                });
+                            }
+                        }
+                    );
+                }
+
+                /**
+                 * 添加应用
+                 */
+                self.goAppInfo = function (appId) {
+                    $scope.app.maskParams = {'appID': self.appID};
+                    $scope.app.showHideMask(true, 'pages/appEdit.html');
+                }
+            }
+        ])
+
+        .controller('appEditController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
+            function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
+                var self = this;
+                self.init = function () {
+                    self.appID = $scope.app.maskParams.appID;
+                }
+
+                self.cancel = function () {
+                    $scope.app.showHideMask(false);
+                };
             }
         ])
 

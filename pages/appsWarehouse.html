@@ -1,3 +1,21 @@
 <div ng-controller="appsWarehouseController as appsWarehouse" ng-init="appsWarehouse.init()">
-
+    <div>
+        <h3>应用列表</h3>
+        <div>
+            <button type="button" class="btn btn-primary" ng-click="appsWarehouse.goAppInfo()">上传应用</button>
+        </div>
+        <div>
+            <table ng-table="appsWarehouse.tableParams">
+                <tbody>
+                    <tr ng-repeat="app in $data">
+                        <td>{{app.Name}}</td>
+                        <td>大小：{{app.Size}}</td>
+                        <td>版本：{{app.ApkStar}}</td>
+                        <td>地址：{{app.URL}}</td>
+                        <td><button type="button" class="btn btn-default" ng-click="appsWarehouse.goAppInfo(app.ID)">详情</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
