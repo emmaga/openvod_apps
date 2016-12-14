@@ -1,6 +1,8 @@
-<div ng-controller="appsGroupController as app" ng-init="appsGroup.init()">
+<div ng-controller="appsGroupController as appsGroup" ng-init="appsGroup.init()">
     <!-- 左侧菜单 -->
-    <div class="nav-left ">
+    <div class="nav-left col-lg-5">
+        <h3>应用组合列表</h3>
+        <button type="button" class="btn btn-primary" ng-click="appsGroup.addAdv()">添加广告</button>
         <ul class="nav nav-stacked">
             <li class="nav-header active" ng-repeat="item in appsGroup.groups" >
                 <a class="theme-hover"  ui-sref-active="active" ui-sref="app.appsGroup.appsGroupInfo({groupId:{{item.groupId}}})">
@@ -11,5 +13,5 @@
     </div>
 
     <!-- 右侧 -->
-    <ui-view></ui-view>
+    <ui-view class="col-lg-7"></ui-view>
 </div>
