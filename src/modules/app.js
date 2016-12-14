@@ -50,9 +50,8 @@
         }])
 
         .constant('CONFIG', {
-            serverUrl: 'http://movies.clearidc.com/backend_movie/v1/',
-            uploadImgUrl: 'http://mres.cleartv.cn/upload',
-            uploadVideoUrl: 'http://movies.clearidc.com/upload',
+            serverUrl: 'http://openvod.cleartv.cn/backend_app/v1/',
+            uploadImgUrl: 'http://openvod.cleartv.cn/upload',
             testUrl: 'test/',
             test: false
         })
