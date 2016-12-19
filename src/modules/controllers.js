@@ -274,7 +274,17 @@
                         self.title = '新增素材';
                         self.appFile = new file([]);
                         self.logo = new file([]);
-                        self.App = "";
+                        self.App = {
+                            Name: '',
+                            ApkStar: '',
+                            LogoURL: '',
+                            URL: '',
+                            Size: '',
+                            Apk: 1,
+                            Description: '',
+                            ApkPackageName: '',
+                            ApkStartActivity: '',
+                            ApkStartParam: ''};
                     } else {
                         self.isAdd = false;
                         self.title = '编辑素材';
@@ -289,20 +299,34 @@
                 };
                 
                 self.save = function () {
+                    if (self.App.Name == '') {
+                        alert("请输入用户名")
+                        return false;
+                    }
+                    if (self.App.ApkStar == '') {
+                        alert("请评分")
+                        return false;
+                    }
+                    if (self.App.URL == '') {
+                        alert("请上传应用")
+                        return false;
+                    }
+                    if (self.logo.data[0].src == '') {
+                        alert("请上传应用logo")
+                        return false;
+                    }
                     self.saving = true;
                     var appData = {
-                        URLRelative: self.App.URLRelative,
-                        ApkStartParam: self.App.ApkStartParam,
-                        Name: self.App.Name,
-                        ApkStar: self.App.ApkStar,
-                        LogoURLRelative: self.App.LogoURLRelative,
+                        Name: self.App.Name.trim(),
+                        ApkStar: self.App.ApkStar.toString(),
+                        LogoURL: self.logo.data[0].src,
                         URL: self.App.URL,
-                        ApkStartActivity: self.App.ApkStartActivity,
+                        Size: self.App.Size,
                         Apk: 1,
                         Description: self.App.Description,
-                        LogoURL: self.App.LogoURL,
                         ApkPackageName: self.App.ApkPackageName,
-                        Size: self.App.Size
+                        ApkStartActivity: self.App.ApkStartActivity,
+                        ApkStartParam: self.App.ApkStartParam
                     }
                     var action = "addApp"
                     if (!self.isAdd) {

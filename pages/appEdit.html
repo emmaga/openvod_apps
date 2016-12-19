@@ -47,7 +47,7 @@
                 <label>评分：</label>
                 <span uib-rating ng-model="appEdit.App.ApkStar" max="5" read-only="appEdit.isReadonly"
                       on-hover="appEdit.hoveringOver(value)" on-leave="appEdit.overStar = null"
-                      aria-labelledby="default-rating"></span>
+                      aria-labelledby="default-rating" required></span>
                 <span class="label"
                       ng-class="{'label-warning': appEdit.score<2, 'label-info': appEdit.score>=2 && appEdit.score<4, 'label-success': appEdit.score>=4}"
                       ng-show="appEdit.overStar && !appEdit.isReadonly">{{appEdit.score}}</span>
