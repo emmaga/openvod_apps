@@ -260,6 +260,42 @@
                     $scope.app.maskParams = {'app': app};
                     $scope.app.showHideMask(true, 'pages/appEdit.html');
                 }
+
+                /**
+                 * 删除应用
+                 * @param ID
+                 */
+                self.appDelete = function (ID) {
+                    if(confirm('确认删除此应用吗？')) {
+                        self.deleting = true;
+                        var data = JSON.stringify({
+                            action: 'deleteApp',
+                            token: util.getParams('token'),
+                            data: {
+                                ID: ID
+                            }
+                        })
+                        $http({
+                            method: 'POST',
+                            url: util.getApiUrl('app', '', 'server'),
+                            data: data
+                        }).then(function successCallback(response) {
+                            var msg = response.data;
+                            if (msg.rescode == '200') {
+                                $state.reload();
+                            } else if (msg.rescode == '401') {
+                                alert('访问超时，请重新登录');
+                                $state.go('login');
+                            } else {
+                                alert('删除错误，' + msg.errInfo);
+                            }
+                        }, function errorCallback(response) {
+                            alert(response.status + ' 服务器出错');
+                        }).finally(function () {
+                            self.deleting = false;
+                        });
+                    }
+                }
             }
         ])
 
