@@ -105,15 +105,12 @@
                 }
             }
         ])
-
+        
+        // 应用组合列表
         .controller('appsGroupController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
             function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
                 var self = this;
-                self.groups = [
-                    {"groupId": 0, "groupName": "test_group1"},
-                    {"groupId": 1, "groupName": "test_group2"},
-                    {"groupId": 2, "groupName": "test_group3"}
-                ];
+               
                 self.init = function () {
                     self.search();
                 }
@@ -178,12 +175,62 @@
                     );
                 }
 
+            }
+        ])
+
+        // 添加应用组合
+        .controller('addAppGroupController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
+            function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
+                console.log('addAppGroupController')
+                var self = this;
+               
+                self.init = function () {
+                    // 提交表单 数据
+                    self.form = {};
+                }
+
+
                 /**
-                 * 添加应用
+                 * 添加应用组合
                  */
-                self.goAppInfo = function (app) {
-                    $scope.app.maskParams = {'app': app};
-                    $scope.app.showHideMask(true, 'pages/appEdit.html');
+                self.addAppGroup = function() {
+                    self.saving = true;
+
+                    var data = JSON.stringify({
+                        action: "addAppGroup",
+                        token: util.getParams('token'),
+                        data :{
+                            "Name": self.form.Name,
+                            "Description": self.form.Description
+                        }
+                    })
+
+                    $http({
+                        method: 'POST',
+                        url: util.getApiUrl('appgroup', '', 'server'),
+                        data: data
+                    }).then(function successCallback(response) {
+                        var msg = response.data;
+                        if (msg.rescode == '200') {
+                            alert('应用组合添加成功');
+                            $state.go($state.current, {}, { reload: true });
+                        } else if (msg.rescode == '401') {
+                            alert('访问超时，请重新登录');
+                            $state.go('login');
+                        } else {
+                            alert('读取数据出错，' + msg.errInfo);
+                        }
+                    }, function errorCallback(response) {
+                        alert(response.status + ' 服务器出错');
+                    }).finally(function() {
+                        self.saving = false;
+                    });
+                }
+
+
+
+                self.cancel = function(){
+                    $scope.app.showHideMask(false);
                 }
             }
         ])

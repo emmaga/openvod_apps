@@ -2,14 +2,14 @@
     <!-- 左侧菜单 -->
     <div class="nav-left col-lg-5">
         <h3>应用组合列表</h3>
-        <button type="button" class="btn btn-primary" ng-click="appsGroup.addAdv()">添加广告</button>
+        <button type="button" class="btn btn-primary" ng-click="appsGroup.addAppGroup()">添加应用组合</button>
        
         <div ng-show="appsGroup.loading">loading...</div>
         <table ng-table="appsGroup.tableParams">
             <tbody>
                 <tr ng-repeat="appGroup in $data">
                     <td title="'名字'">{{appGroup.Name}}</td>
-                    <td title="'ID'">大小：{{appGroup.ID}}</td>
+                    <td title="'ID'">{{appGroup.ID}}</td>
                     
                     <td><button type="button" class="btn btn-default" ng-click="appGroup.goAppInfo(app)">详情</button></td>
                 </tr>

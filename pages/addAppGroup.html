@@ -1,3 +1,9 @@
-<div ng-controller="addAppGroup as groupAdd" ng-init="groupAdd.init()">
-    <div>2222</div>
+<div ng-controller="addAppGroupController as groupAdd" ng-init="groupAdd.init()">
+addAppGroupController<br>
+<button ng-click="groupAdd.cancel()">关闭</button>
+<form novalidate ng-submit="addForm.$valid && groupAdd.addAppGroup()" name="addForm">
+    应用组合名字：<input type="text" name="" ng-model="groupAdd.form.Name" required><br>
+    应用组合描述：<input type="text" name="" ng-model="groupAdd.form.Description" required><br>
+    <input type="submit" name="" ng-disabled="addForm.$invalid || groupAdd.saving" class="btn btn-primary">
+</form>
 </div>
