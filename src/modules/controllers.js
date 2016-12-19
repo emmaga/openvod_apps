@@ -106,8 +106,8 @@
             }
         ])
 
-        .controller('appsGroupController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'util',
-            function ($http, $scope, $state, $filter, $stateParams, util) {
+        .controller('appsGroupController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
+            function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
                 var self = this;
                 self.groups = [
                     {"groupId": 0, "groupName": "test_group1"},
@@ -115,15 +115,75 @@
                     {"groupId": 2, "groupName": "test_group3"}
                 ];
                 self.init = function () {
-
+                    self.search();
                 }
 
                 /**
-                 * 添加广告
+                 * 添加应用组合
                  */
-                self.addAdv = function () {
+                self.addAppGroup = function () {
                     $scope.app.maskParams = {'groupId': self.groupId};
-                    $scope.app.showHideMask(true, 'pages/droupAdd.html');
+                    $scope.app.showHideMask(true, 'pages/addAppGroup.html');
+                }
+
+                /**
+                 * 获取应用组合列表
+                 */
+                self.search = function () {
+                    self.loading = true;
+                    self.tableParams = new NgTableParams(
+                        {
+                            page: 1,
+                            count: 15,
+                            url: ''
+                        },
+                        {
+                            counts: false,
+                            getData: function (params) {
+                                var paramsUrl = params.url();
+                                var data = JSON.stringify({
+                                    action: "getAppGroupList",
+                                    token: util.getParams('token'),
+                                    page: Number(paramsUrl.page),
+                                    count: Number(paramsUrl.count)
+                                })
+                                
+                                return $http({
+                                    method: 'POST',
+                                    url: util.getApiUrl('appgroup', '', 'server'),
+                                    data: data
+                                }).then(function successCallback(response) {
+                                    var msg = response.data;
+                                    if (msg.rescode == '200') {
+                                        if (msg.data.appGroupTotal == 0 ) {
+                                            self.noData = true;
+                                            return;
+                                        }
+                                        params.total(msg.data.appGroupTotal);
+                                        self.appGroup = msg.data.appGroupList;
+                                        return msg.data.appGroupList;
+                                    } else if (msg.rescode == '401') {
+                                        alert('访问超时，请重新登录');
+                                        $state.go('login');
+                                    } else {
+                                        alert('读取数据出错，' + msg.errInfo);
+                                    }
+                                }, function errorCallback(response) {
+                                    alert(response.status + ' 服务器出错');
+                                }).finally(function () {
+                                    self.loading = false;
+                                });
+                            }
+                        }
+                    );
+                }
+
+                /**
+                 * 添加应用
+                 */
+                self.goAppInfo = function (app) {
+                    $scope.app.maskParams = {'app': app};
+                    $scope.app.showHideMask(true, 'pages/appEdit.html');
                 }
             }
         ])
@@ -132,8 +192,6 @@
             function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
                 var self = this;
                 self.init = function () {
-                    self.lang = util.langStyle();
-                    // self.defaultLangCode = util.getDefaultLangCode();
                     self.groupId = $stateParams.groupId;
                 }
 
