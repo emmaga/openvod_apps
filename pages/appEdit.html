@@ -1,3 +1,79 @@
 <div ng-controller="appEditController as appEdit" ng-init="appEdit.init()">
-    <div>2222</div>
+    <div>
+        <h3>{{appEdit.title}}</h3>
+    </div>
+    <div>
+        <div ng-repeat="app in appEdit.appFile.data">
+            <uib-progressbar animate="false" value="dynamic" type="success"><b>{{app.progress}}%</b></uib-progressbar>
+            <a ng-click="appEdit.appFile.deleteById(app.id); ">
+                删除
+            </a>
+        </div>
+        <input id="upload" style="display: none;" type="file" file-model="myFile" data-e="hidenUpload" accept=".apk"/>
+        <div class="col-md-12 text-center" style="margin-top: 10px; margin-bottom: 10px;">
+            <a class="btn btn-primary center-block" ng-click="appEdit.clickUpload('upload')">上传应用</a>
+            <a id="hidenUpload" style="display: none;"
+               ng-click="appEdit.appFile.uploadFile('myFile', appEdit.appFile, true)"></a>
+        </div>
+        <form id="appEditForm" name="appEditForm" ng-submit="appEditForm.$valid && appEdit.save()" role="form">
+            <div class="form-group">
+                <label>应用名：</label>
+                <input type="text" ng-model="appEdit.App.Name" required>
+            </div>
+            <div class="col-md-12 text-center" style="margin-top: 10px; margin-bottom: 10px;">
+                <input id="upload2" style="display: none;" type="file" file-model="myFile" data-e="hidenUpload2"
+                       accept="image/*"/>
+                <a class="btn btn-primary center-block" ng-click="appEdit.clickUpload('upload2')">上传Logo</a>
+                <a id="hidenUpload2" style="display: none;"
+                   ng-click="appEdit.logo.uploadFile('myFile', appEdit.logo, false)"></a>
+            </div>
+            <div ng-repeat="img in appEdit.logo.data">
+                <img ng-src="{{img.src}}" alt="{{img}}"/>
+                进度： {{img.progress}}
+                剩余： {{img.leftSize}}
+                <a ng-click="appEdit.logo.deleteById(img.id); ">
+                    删除
+                </a>
+            </div>
+            <div class="form-group">
+                <label>大小：</label>
+                <input type="text" ng-model="appEdit.App.Size" disabled>
+            </div>
+            <div class="form-group">
+                <label>下载URL：</label>
+                <input type="text" ng-model="appEdit.App.URL" disabled>
+            </div>
+            <div class="form-group">
+                <label>评分：</label>
+                <span uib-rating ng-model="appEdit.App.ApkStar" max="5" read-only="appEdit.isReadonly"
+                      on-hover="appEdit.hoveringOver(value)" on-leave="appEdit.overStar = null"
+                      aria-labelledby="default-rating"></span>
+                <span class="label"
+                      ng-class="{'label-warning': appEdit.score<2, 'label-info': appEdit.score>=2 && appEdit.score<4, 'label-success': appEdit.score>=4}"
+                      ng-show="appEdit.overStar && !appEdit.isReadonly">{{appEdit.score}}</span>
+            </div>
+            <div class="form-group">
+                <label>应用介绍：</label>
+                <textarea rows="4" ng-model="appEdit.App.Description"></textarea>
+            </div>
+            <hr>
+            <div class="form-group">
+                <label>apk包名：</label>
+                <input type="text" ng-model="appEdit.App.ApkPackageName">
+            </div>
+            <div class="form-group">
+                <label>apk启动动作：</label>
+                <input type="text" ng-model="appEdit.App.ApkStartActivity">
+            </div>
+            <div class="form-group">
+                <label>apk启动参数：</label>
+                <input type="text" ng-model="appEdit.App.ApkStartParam">
+            </div>
+        </form>
+        <div>
+            <button type="button" class="btn btn-default" ng-click="appEdit.cancel()">取消</button>
+            <button type="submit" class="btn btn-primary" form="appEditForm">保存</button>
+        </div>
+    </div>
+    <div ng-show="appEdit.saving">Saving...</div>
 </div>

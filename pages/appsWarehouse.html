@@ -10,9 +10,9 @@
                     <tr ng-repeat="app in $data">
                         <td>{{app.Name}}</td>
                         <td>大小：{{app.Size}}</td>
-                        <td>版本：{{app.ApkStar}}</td>
+                        <td>评分：{{app.ApkStar}}</td>
                         <td>地址：{{app.URL}}</td>
-                        <td><button type="button" class="btn btn-default" ng-click="appsWarehouse.goAppInfo(app.ID)">详情</button></td>
+                        <td><button type="button" class="btn btn-default" ng-click="appsWarehouse.goAppInfo(app)">详情</button></td>
                     </tr>
                 </tbody>
             </table>
