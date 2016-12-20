@@ -38,6 +38,11 @@
                     url: '/appsGroup',
                     templateUrl: 'pages/appsGroup.html'
                 })
+                // 应用组合 的 应用列表
+                .state('app.appsGroup.groupAppList', {
+                    url: '/groupAppList?ID',
+                    templateUrl: 'pages/groupAppList.html'
+                })
                 .state('app.appsGroup.appsGroupInfo', {
                     url: '/appsGroupInfo?groupId',
                     templateUrl: 'pages/appsGroupInfo.html'

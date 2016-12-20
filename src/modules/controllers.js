@@ -334,6 +334,105 @@
             }
         ])
 
+        // 获取 第三方应用组 的应用列表
+        .controller('groupAppListController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
+            function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
+                console.log('groupAppListController')
+                console.log($scope.app.maskParams)
+                console.log($stateParams)
+                var self = this;
+               
+                self.init = function () {
+                    self.stateParams = $stateParams;
+                    // 提交表单 数据
+                    self.getGroupAppList();
+                }
+
+
+                /**
+                 * 编辑应用组合
+                 */
+                self.getGroupAppList = function() {
+                    self.loading = true;
+                    var data = JSON.stringify({
+                        action: "getGroupAppList",
+                        token: util.getParams('token'),
+                        data: {
+                            "ID": self.stateParams.ID - 0,
+                           
+                        }
+                    })
+
+                    $http({
+                        method: 'POST',
+                        url: util.getApiUrl('appgroup', '', 'server'),
+                        data: data
+                    }).then(function successCallback(response) {
+                        var msg = response.data;
+                        if (msg.rescode == '200') {
+                            if (msg.data.appList.length == 0) {
+                                self.noData = true;
+                                return;
+                            }
+                            self.appList = msg.data.appList;
+                        } else if (msg.rescode == '401') {
+                            alert('访问超时，请重新登录');
+                            $state.go('login');
+                        } else {
+                            alert('读取数据出错，' + msg.errInfo);
+                        }
+                    }, function errorCallback(response) {
+                        alert(response.status + ' 服务器出错');
+                    }).finally(function() {
+                        self.loading = false;
+                    });
+                }
+
+                /**
+                 * 删除应用组合
+                 */
+                self.deleteAppGroup = function() {
+                    var flag = confirm("确定删除？")
+                    if (!flag) {
+                        return;
+                    }
+                    self.saving = true;
+                    var data = JSON.stringify({
+                        action: "deleteAppGroup",
+                        token: util.getParams('token'),
+                        data: {
+                            "ID": self.form.ID
+                        }
+                    })
+
+                    $http({
+                        method: 'POST',
+                        url: util.getApiUrl('appgroup', '', 'server'),
+                        data: data
+                    }).then(function successCallback(response) {
+                        var msg = response.data;
+                        if (msg.rescode == '200') {
+                            alert('应用组合删除成功');
+                            $state.go($state.current, {}, { reload: true });
+                        } else if (msg.rescode == '401') {
+                            alert('访问超时，请重新登录');
+                            $state.go('login');
+                        } else {
+                            alert('读取数据出错，' + msg.errInfo);
+                        }
+                    }, function errorCallback(response) {
+                        alert(response.status + ' 服务器出错');
+                    }).finally(function() {
+                        self.saving = false;
+                    });
+                }
+
+                self.cancel = function(){
+                    $scope.app.showHideMask(false);
+                }
+            }
+        ])
+
         .controller('appsGroupInfoController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
             function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
                 var self = this;

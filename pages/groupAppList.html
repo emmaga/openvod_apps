@@ -1,0 +1,17 @@
+<div ng-controller="groupAppListController as gAL" ng-init="gAL.init()">
+    <!-- 左侧菜单 -->
+    <div class="nav-left col-lg-5">
+        <h3>第三方应用组 的应用列表</h3>
+        <button type="button" class="btn btn-primary" ng-click="gAL.editGroupAppList()">编辑</button>
+       
+        <div ng-show="gAL.loading">loading...</div>
+        <div ng-repeat="app in gAL.appList track by $index">
+            AppGroupID：{{app.AppGroupID}}<br>
+            AppID：{{app.AppID}}<br>
+            AppName：{{app.AppName}}<br>
+            Seq：{{app.Seq}}<br>
+        </div>
+        <div ng-show="gAL.noData">查无数据</div>
+    </div>
+
+</div>
