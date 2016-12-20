@@ -119,8 +119,12 @@
                  * 添加应用组合
                  */
                 self.addAppGroup = function () {
-                    $scope.app.maskParams = {'groupId': self.groupId};
                     $scope.app.showHideMask(true, 'pages/addAppGroup.html');
+                }
+
+                self.editAppGroup = function (appGroup) {
+                    $scope.app.maskParams = {'appGroup': appGroup};
+                    $scope.app.showHideMask(true, 'pages/editAppGroup.html');
                 }
 
                 /**
@@ -228,6 +232,101 @@
                 }
 
 
+
+                self.cancel = function(){
+                    $scope.app.showHideMask(false);
+                }
+            }
+        ])
+
+        // 编辑应用组合
+        .controller('editAppGroupController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
+            function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
+                console.log('editAppGroupController')
+                console.log($scope.app.maskParams)
+                var self = this;
+               
+                self.init = function () {
+                    // 提交表单 数据
+                    self.form  = $scope.app.maskParams.appGroup;
+                }
+
+
+                /**
+                 * 编辑应用组合
+                 */
+                self.editAppGroup = function() {
+                    self.saving = true;
+                    var data = JSON.stringify({
+                        action: "editAppGroup",
+                        token: util.getParams('token'),
+                        data: {
+                            "ID": self.form.ID,
+                            "Name": self.form.Name,
+                            "Description": self.form.Description
+                        }
+                    })
+
+                    $http({
+                        method: 'POST',
+                        url: util.getApiUrl('appgroup', '', 'server'),
+                        data: data
+                    }).then(function successCallback(response) {
+                        var msg = response.data;
+                        if (msg.rescode == '200') {
+                            alert('应用组合编辑成功');
+                            $state.go($state.current, {}, { reload: true });
+                        } else if (msg.rescode == '401') {
+                            alert('访问超时，请重新登录');
+                            $state.go('login');
+                        } else {
+                            alert('读取数据出错，' + msg.errInfo);
+                        }
+                    }, function errorCallback(response) {
+                        alert(response.status + ' 服务器出错');
+                    }).finally(function() {
+                        self.saving = false;
+                    });
+                }
+
+                /**
+                 * 删除应用组合
+                 */
+                self.deleteAppGroup = function() {
+                    var flag = confirm("确定删除？")
+                    if (!flag) {
+                        return;
+                    }
+                    self.saving = true;
+                    var data = JSON.stringify({
+                        action: "deleteAppGroup",
+                        token: util.getParams('token'),
+                        data: {
+                            "ID": self.form.ID
+                        }
+                    })
+
+                    $http({
+                        method: 'POST',
+                        url: util.getApiUrl('appgroup', '', 'server'),
+                        data: data
+                    }).then(function successCallback(response) {
+                        var msg = response.data;
+                        if (msg.rescode == '200') {
+                            alert('应用组合删除成功');
+                            $state.go($state.current, {}, { reload: true });
+                        } else if (msg.rescode == '401') {
+                            alert('访问超时，请重新登录');
+                            $state.go('login');
+                        } else {
+                            alert('读取数据出错，' + msg.errInfo);
+                        }
+                    }, function errorCallback(response) {
+                        alert(response.status + ' 服务器出错');
+                    }).finally(function() {
+                        self.saving = false;
+                    });
+                }
 
                 self.cancel = function(){
                     $scope.app.showHideMask(false);
