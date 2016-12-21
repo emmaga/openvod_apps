@@ -69,9 +69,14 @@
             function ($http, $scope, $state, $stateParams, util, CONFIG) {
                 var self = this;
                 self.init = function () {
+                    console.log($state.current.name)
                     self.loading = false;
                     self.isNavCollapsed = true;
-                    $state.go('app.appsGroup')
+                    if ($state.current.name == 'app') {
+                        self.goPage('app.appsGroup');
+                    } else {
+                        self.goPage($state.current.name);
+                    }
                 }
 
                 self.logout = function (event) {
@@ -79,12 +84,8 @@
                     $state.go('login');
                 }
 
-                self.goAppsGroup = function () {
-                    $state.go('app.appsGroup');
-                }
-
-                self.goAppsWarehouse = function () {
-                    $state.go('app.appsWarehouse');
+                self.goPage = function (page) {
+                    $state.go(page);
                 }
 
                 /**
