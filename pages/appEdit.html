@@ -35,6 +35,21 @@
                     删除
                 </a>
             </div>
+            <div class="col-md-12 text-center" style="margin-top: 10px; margin-bottom: 10px;">
+                <input id="upload3" style="display: none;" type="file" file-model="myFile" data-e="hidenUpload3"
+                       accept="image/*"/>
+                <a class="btn btn-primary center-block" ng-click="appEdit.clickUpload('upload2')">上传应用图片</a>
+                <a id="hidenUpload3" style="display: none;"
+                   ng-click="appEdit.imgs.uploadFile('myFile', appEdit.imgs, false)"></a>
+            </div>
+            <div ng-repeat="img in appEdit.imgs.data">
+                <img ng-src="{{img.src}}" alt="{{img}}"/>
+                进度： {{img.progress}}
+                剩余： {{img.leftSize}}
+                <a ng-click="appEdit.logo.deleteById(img.id); ">
+                    删除
+                </a>
+            </div>
             <div class="form-group">
                 <label>大小：</label>
                 <input type="text" ng-model="appEdit.App.Size" disabled>

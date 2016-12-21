@@ -310,6 +310,7 @@
                         self.title = '新增素材';
                         self.appFile = new file([]);
                         self.logo = new file([]);
+                        self.imgs = new file([]);
                         self.App = {
                             Name: '',
                             ApkStar: '',
@@ -326,6 +327,7 @@
                         self.title = '编辑素材';
                         self.initApp(self.App);
                         self.initLogo([{ImageURL: self.App.LogoURL}]);
+                        self.initImgs(self.App.ID);
                     }
                     self.isReadonly = false;
                 }
@@ -417,6 +419,38 @@
                     self.logo.initLogo();
                 }
 
+                self.initImgs = function (ID) {
+                    self.loading = true;
+                    // 初始化应用图片
+                    var data = JSON.stringify({
+                        action: 'getAppIntroPicList',
+                        token: util.getParams('token'),
+                        data: {
+                            ID: ID
+                        }
+                    })
+                    $http({
+                        method: 'POST',
+                        url: util.getApiUrl('app', '', 'server'),
+                        data: data
+                    }).then(function successCallback(response) {
+                        var msg = response.data;
+                        if (msg.rescode == '200') {
+                            self.imgs = new file(msg.data.appIntroPicList, true);
+                            self.imgs.initImgs();
+                        } else if (msg.rescode == '401') {
+                            alert('访问超时，请重新登录');
+                            $state.go('login');
+                        } else {
+                            alert('获取图片失败，' + msg.errInfo);
+                        }
+                    }, function errorCallback(response) {
+                        alert(response.status + ' 服务器出错');
+                    }).finally(function () {
+                        self.loading = false;
+                    });
+                }
+
                 self.clickUpload = function (e) {
                     setTimeout(function () {
                         document.getElementById(e).click();
@@ -448,6 +482,17 @@
                             this.data[i] = {
                                 "src": l[i].ImageURL,
                                 "fileSize": l[i].ImageSize,
+                                "id": this.maxId++,
+                                "progress": 100
+                            };
+                        }
+                    },
+                    initImgs: function () {
+                        var l = this.initFileList;
+                        for (var i = 0; i < l.length; i++) {
+                            this.data[i] = {
+                                "src": l[i].IntroPicURL,
+                                "fileSize": l[i].IntroPicURLSize,
                                 "id": this.maxId++,
                                 "progress": 100
                             };
