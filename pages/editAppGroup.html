@@ -1,0 +1,10 @@
+<div ng-controller="editAppGroupController as editAppGroup" ng-init="editAppGroup.init()">
+editAppGroupController<br>
+<button ng-click="editAppGroup.cancel()">关闭</button>
+<form novalidate ng-submit="addForm.$valid && editAppGroup.editAppGroup()" name="addForm">
+    应用组合名字：<input type="text" name="" ng-model="editAppGroup.form.Name" required><br>
+    应用组合描述：<input type="text" name="" ng-model="editAppGroup.form.Description" required><br>
+    <input type="submit" name="" ng-disabled="addForm.$invalid || editAppGroup.saving" class="btn btn-primary">
+    <input value="删除" name="" ng-disabled="editAppGroup.saving" class="btn btn-primary" ng-click="editAppGroup.deleteAppGroup()">
+</form>
+</div>
