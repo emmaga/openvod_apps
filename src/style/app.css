@@ -1,0 +1,22 @@
+.bg{
+    position: absolute;
+    top: -18px;
+    left: -18px;
+    right: -18px;
+    bottom: -18px;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+.bg:after{
+    content:' ';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(90,90,90,.125);
+    /*mix-blend-mode: darken;*/
+}
