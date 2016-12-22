@@ -69,7 +69,6 @@
             function ($http, $scope, $state, $stateParams, util, CONFIG) {
                 var self = this;
                 self.init = function () {
-                    console.log($state.current.name)
                     self.loading = false;
                     self.isNavCollapsed = true;
                     if ($state.current.name == 'app') {
