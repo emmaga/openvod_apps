@@ -8,13 +8,14 @@
             <table ng-table="appsWarehouse.tableParams">
                 <tbody>
                     <tr ng-repeat="app in $data">
+                        <td><img ng-src="{{app.LogoURL}}"></td>
                         <td>{{app.Name}}</td>
                         <td>大小：{{app.Size}}</td>
                         <td>评分：<span uib-rating ng-model="app.ApkStar" max="5" read-only="true"
                                      aria-labelledby="default-rating" required></span></td>
-                        <td>地址：{{app.URL}}</td>
                         <td>
                             <button type="button" class="btn btn-default" ng-click="appsWarehouse.goAppInfo(app)">详情</button>
+                            <button type="button" class="btn btn-default" ng-click="appsWarehouse.goAppImgs(app)">应用图片</button>
                             <button type="button" class="btn btn-default" ng-click="appsWarehouse.appDelete(app.ID)">删除</button>
                         </td>
                     </tr>
