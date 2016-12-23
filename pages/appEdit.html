@@ -46,7 +46,7 @@
                 <img ng-src="{{img.src}}" alt="{{img}}"/>
                 进度： {{img.progress}}
                 剩余： {{img.leftSize}}
-                <a ng-click="appEdit.logo.deleteById(img.id); ">
+                <a ng-click="appEdit.imgs.deleteById(img.id); ">
                     删除
                 </a>
             </div>
@@ -66,6 +66,10 @@
                 <span class="label"
                       ng-class="{'label-warning': appEdit.score<2, 'label-info': appEdit.score>=2 && appEdit.score<4, 'label-success': appEdit.score>=4}"
                       ng-show="appEdit.overStar && !appEdit.isReadonly">{{appEdit.score}}</span>
+            </div>
+            <div class="form-group">
+                <label>版本号：</label>
+                <input type="text" ng-model="appEdit.App.ApkVersion" required>
             </div>
             <div class="form-group">
                 <label>应用介绍：</label>

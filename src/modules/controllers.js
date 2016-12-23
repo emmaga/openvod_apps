@@ -670,14 +670,6 @@
                 }
 
                 /**
-                 * 添加应用
-                 */
-                self.goAppImgs = function (app) {
-                    $scope.app.maskParams = {'app': app};
-                    $scope.app.showHideMask(true, 'pages/appEditImgs.html');
-                }
-
-                /**
                  * 删除应用
                  * @param ID
                  */
@@ -731,18 +723,21 @@
                             Name: '',
                             ApkStar: '',
                             LogoURL: '',
+                            LogoSize: '',
                             URL: '',
                             Size: '',
                             Apk: 1,
                             Description: '',
                             ApkPackageName: '',
                             ApkStartActivity: '',
-                            ApkStartParam: ''};
+                            ApkStartParam: '',
+                            ApkVersion: ''
+                        };
                     } else {
                         self.isAdd = false;
                         self.title = '编辑素材';
                         self.initApp(self.App);
-                        self.initLogo([{ImageURL: self.App.LogoURL}]);
+                        self.initLogo([{LogoURL: self.App.LogoURL, LogoSize: self.App.LogoSize}]);
                         self.initImgs(self.App.ID);
                     }
                     self.isReadonly = false;
@@ -774,13 +769,15 @@
                         Name: self.App.Name.trim(),
                         ApkStar: self.App.ApkStar.toString(),
                         LogoURL: self.logo.data[0].src,
+                        LogoSize:self.logo.data[0].fileSize,
                         URL: self.App.URL,
                         Size: self.App.Size,
                         Apk: 1,
                         Description: self.App.Description,
                         ApkPackageName: self.App.ApkPackageName,
                         ApkStartActivity: self.App.ApkStartActivity,
-                        ApkStartParam: self.App.ApkStartParam
+                        ApkStartParam: self.App.ApkStartParam,
+                        ApkVersion: self.App.ApkVersion
                     }
                     var action = "addApp"
                     if (!self.isAdd) {
@@ -797,11 +794,46 @@
                         method: 'POST',
                         url: util.getApiUrl('app', '', 'server'),
                         data: data
-                    }).then(function successCallback(response) {
+                    }).then(function (response) {
                         var msg = response.data;
                         if (msg.rescode == '200') {
-                            alert('保存成功');
-                            $state.reload();
+                            var appId = response.data.AppID
+                            var appIntroPicList = [];
+                            for (var i = 0; i < self.imgs.data.length; i++) {
+                                appIntroPicList.push({
+                                    IntroPicURL: self.imgs.data[i].src,
+                                    IntroPicURLSize: self.imgs.data[i].fileSize,
+                                    Seq: self.imgs.data[i].id + 1
+                                });
+                            }
+                            var appData = {
+                                ID: appId,
+                                appIntroPicList: appIntroPicList
+                            }
+                            var data = JSON.stringify({
+                                action: 'editAppIntroPicList',
+                                token: util.getParams('token'),
+                                data: appData
+                            })
+
+                            $http({
+                                method: 'POST',
+                                url: util.getApiUrl('app', '', 'server'),
+                                data: data
+                            }).then(function (response) {
+                                var msg = response.data;
+                                if (msg.rescode == '200') {
+                                    alert('保存成功');
+                                    $state.reload();
+                                } else if (msg.rescode == '401') {
+                                    alert('访问超时，请重新登录');
+                                    $state.go('login');
+                                } else {
+                                    alert('保存错误，' + msg.errInfo);
+                                }
+                            }, function errorCallback(response) {
+                                alert(response.status + ' 服务器出错');
+                            })
                         } else if (msg.rescode == '401') {
                             alert('访问超时，请重新登录');
                             $state.go('login');
@@ -831,6 +863,7 @@
 
                 self.initLogo = function (logoList) {
                     // 初始化LOGO
+                    self.App.LogoSize = logoList[0].LogoSize;
                     self.logo = new file(logoList, true);
                     self.logo.initLogo();
                 }
@@ -852,7 +885,7 @@
                     }).then(function successCallback(response) {
                         var msg = response.data;
                         if (msg.rescode == '200') {
-                            self.imgs = new file(msg.data.appIntroPicList, true);
+                            self.imgs = new file(msg.data.appIntroPicList, false);
                             self.imgs.initImgs();
                         } else if (msg.rescode == '401') {
                             alert('访问超时，请重新登录');
@@ -896,8 +929,8 @@
                         var l = this.initFileList;
                         for (var i = 0; i < l.length; i++) {
                             this.data[i] = {
-                                "src": l[i].ImageURL,
-                                "fileSize": l[i].ImageSize,
+                                "src": l[i].LogoURL,
+                                "fileSize": l[i].LogoSize,
                                 "id": this.maxId++,
                                 "progress": 100
                             };
@@ -961,219 +994,6 @@
                                     self.App.Size = size;
                                     self.App.Name = name;
                                 }
-                                break;
-                            }
-                        }
-                    },
-
-                    uploadFile: function (e, o, isApp) {
-                        self.isApp = isApp;
-                        // 如果这个对象只允许上传一个文件
-                        if (this.single) {
-                            // 删除第二个以后的文件
-                            for (var i = 1; i < this.data.length; i++) {
-                                this.deleteById(this.data[i].id);
-                            }
-                        }
-
-                        var file = $scope[e];
-                        var uploadUrl = CONFIG.uploadUrl;
-                        var xhr = new XMLHttpRequest();
-                        var fileId = this.add(xhr, file.name, file.size, xhr);
-                        // self.search();
-
-                        util.uploadFileToUrl(xhr, file, uploadUrl, 'normal',
-                            function (evt) {
-                                $scope.$apply(function () {
-                                    if (evt.lengthComputable) {
-                                        var percentComplete = Math.round(evt.loaded * 100 / evt.total);
-                                        o.update(fileId, percentComplete, evt.total - evt.loaded, evt.total);
-                                        // console.log(percentComplete);
-                                    }
-                                });
-                            },
-                            function (xhr) {
-                                var ret = JSON.parse(xhr.responseText);
-                                // console && console.log(ret);
-                                $scope.$apply(function () {
-                                    o.setSrcSizeByXhr(xhr, ret.upload_path, ret.size, file.name);
-                                    // 如果这个对象只允许上传一个文件
-                                    if (o.single) {
-                                        // 删除第一个文件
-                                        o.deleteById(o.data[0].id);
-                                    }
-                                });
-                            },
-                            function (xhr) {
-                                $scope.$apply(function () {
-                                    o.update(fileId, -1, '', '');
-                                });
-                                console.log('failure');
-                                xhr.abort();
-                            }
-                        );
-                    }
-                }
-            }
-        ])
-
-        .controller('appEditImgsController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util', 'CONFIG',
-            function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util, CONFIG) {
-                var self = this;
-                self.init = function () {
-                    self.saving = false;
-                    self.App = $scope.app.maskParams.app;
-                    self.initImgs(self.App.ID);
-                }
-
-                self.cancel = function () {
-                    $scope.app.showHideMask(false);
-                };
-
-                self.save = function () {
-                    if (self.imgs.data.length == 0) {
-                        alert("请至少上传一张图片")
-                        return false;
-                    }
-                    self.saving = true;
-                    var appIntroPicList = [];
-                    for (var i = 0; i < self.imgs.data.length; i++){
-                        appIntroPicList.push({
-                            IntroPicURL: self.imgs.data[i].src,
-                            IntroPicURLSize: self.imgs.data[i].fileSize,
-                            Seq: self.imgs.data[i].id + 1
-                        });
-                    }
-                    var appData = {
-                        ID: self.App.ID,
-                        appIntroPicList: appIntroPicList
-                    }
-                    var data = JSON.stringify({
-                        action: 'editAppIntroPicList',
-                        token: util.getParams('token'),
-                        data: appData
-                    })
-
-                    $http({
-                        method: 'POST',
-                        url: util.getApiUrl('app', '', 'server'),
-                        data: data
-                    }).then(function successCallback(response) {
-                        var msg = response.data;
-                        if (msg.rescode == '200') {
-                            alert('保存成功');
-                            $state.reload();
-                        } else if (msg.rescode == '401') {
-                            alert('访问超时，请重新登录');
-                            $state.go('login');
-                        } else {
-                            alert('保存错误，' + msg.errInfo);
-                        }
-                    }, function errorCallback(response) {
-                        alert(response.status + ' 服务器出错');
-                    }).finally(function () {
-                        self.saving = false;
-                    });
-                }
-                self.initImgs = function (ID) {
-                    self.loading = true;
-                    // 初始化应用图片
-                    var data = JSON.stringify({
-                        action: 'getAppIntroPicList',
-                        token: util.getParams('token'),
-                        data: {
-                            ID: ID
-                        }
-                    })
-                    $http({
-                        method: 'POST',
-                        url: util.getApiUrl('app', '', 'server'),
-                        data: data
-                    }).then(function successCallback(response) {
-                        var msg = response.data;
-                        if (msg.rescode == '200') {
-                            self.imgs = new file(msg.data.appIntroPicList, false);
-                            self.imgs.initImgs();
-                        } else if (msg.rescode == '401') {
-                            alert('访问超时，请重新登录');
-                            $state.go('login');
-                        } else {
-                            alert('获取图片失败，' + msg.errInfo);
-                        }
-                    }, function errorCallback(response) {
-                        alert(response.status + ' 服务器出错');
-                    }).finally(function () {
-                        self.loading = false;
-                    });
-                }
-
-                self.clickUpload = function (e) {
-                    setTimeout(function () {
-                        document.getElementById(e).click();
-                    }, 0);
-                }
-
-                function file(fileList, single) {
-                    this.initFileList = fileList;
-                    this.data = [];
-                    this.maxId = 0;
-                    this.single = single ? true : false;
-                }
-
-                file.prototype = {
-                    initImgs: function () {
-                        var l = this.initFileList;
-                        for (var i = 0; i < l.length; i++) {
-                            this.data[i] = {
-                                "src": l[i].IntroPicURL,
-                                "fileSize": l[i].IntroPicURLSize,
-                                "id": this.maxId++,
-                                "progress": 100
-                            };
-                        }
-                    },
-                    deleteById: function (id) {
-                        var l = this.data;
-                        for (var i = 0; i < l.length; i++) {
-                            if (l[i].id == id) {
-                                // 如果正在上传，取消上传
-                                if (l[i].progress < 100 && l[i].progress != -1) {
-                                    l[i].xhr.abort();
-                                }
-                                l.splice(i, 1);
-                                break;
-                            }
-                        }
-                    },
-
-                    add: function (xhr, fileName, fileSize) {
-                        this.data.push({
-                            "xhr": xhr,
-                            "fileName": fileName,
-                            "fileSize": fileSize,
-                            "progress": 0,
-                            "id": this.maxId
-                        });
-                        return this.maxId++;
-                    },
-
-                    update: function (id, progress, leftSize, fileSize) {
-                        for (var i = 0; i < this.data.length; i++) {
-                            var f = this.data[i];
-                            if (f.id === id) {
-                                f.progress = progress;
-                                f.leftSize = leftSize;
-                                f.fileSize = fileSize;
-                                break;
-                            }
-                        }
-                    },
-
-                    setSrcSizeByXhr: function (xhr, src, size, name) {
-                        for (var i = 0; i < this.data.length; i++) {
-                            if (this.data[i].xhr == xhr) {
-                                this.data[i].src = src;
-                                this.data[i].fileSize = size;
                                 break;
                             }
                         }
