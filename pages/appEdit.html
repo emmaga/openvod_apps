@@ -1,7 +1,7 @@
 <div ng-controller="appEditController as appEdit" ng-init="appEdit.init()">
     <div class="modal-content">
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" ng-click="hotelEdit.cancel()">
+            <button type="button" class="close" data-dismiss="modal" ng-click="appEdit.cancel()">
                 <span aria-hidden="true">&times;</span>
                 <span class="sr-only">Close</span>
             </button>
@@ -27,43 +27,74 @@
                     <label>应用名：</label>
                     <input type="text" class="form-control" ng-model="appEdit.App.Name" required>
                 </div>
-                <div class="col-md-12 text-center" style="margin-top: 10px; margin-bottom: 10px;">
-                    <input id="upload2" style="display: none;" type="file" file-model="myFile" data-e="hidenUpload2"
-                           accept="image/*"/>
-                    <a class="btn btn-primary center-block" ng-click="appEdit.clickUpload('upload2')">上传Logo</a>
-                    <a id="hidenUpload2" style="display: none;"
-                       ng-click="appEdit.logo.uploadFile('myFile', appEdit.logo, false)"></a>
+                <div class="form-group">
+                    <label>应用Logo</label>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <!-- 图 -->
+                            <div ng-repeat="img in appEdit.logo.data" style="background-image: url({{img.src}})"
+                                 class="form-thumbnail">
+                                <!-- 进度条 -->
+                                <div class="progress form-thumbnail-progress" ng-show="!({{img.progress}}==100)">
+                                    <div class="progress-bar progress-bar-success" role="progressbar"
+                                         style="width: {{img.progress}}%;">
+                                    </div>
+                                </div>
+                                <!-- 删除按钮 -->
+                                <i ng-click="appEdit.logo.deleteById(img.id)"
+                                   class="form-thumbnail-delete icon ion-close"></i>
+                            </div>
+                            <!-- 上传按钮 -->
+                            <div class="form-thumbnail form-thumbnail-creat" ng-click="appEdit.clickUpload('upload2')">
+                                <i class="icon ion-upload"></i> 上传Logo
+                                <input id="upload2" style="display: none;" type="file" file-model="myFile"
+                                       data-e="hidenUpload2"
+                                       accept="image/*"/>
+                                <a id="hidenUpload2" style="display: none;"
+                                   ng-click="appEdit.logo.uploadFile('myFile', appEdit.logo, false)"></a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div ng-repeat="img in appEdit.logo.data">
-                    <img ng-src="{{img.src}}" alt="{{img}}"/>
-                    进度： {{img.progress}}
-                    剩余： {{img.leftSize}}
-                    <a ng-click="appEdit.logo.deleteById(img.id); ">
-                        删除
-                    </a>
+                <!-- 应用图片 -->
+                <div class="form-group">
+                    <label>应用图片</label>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <!-- 图 -->
+                            <div ng-repeat="img in appEdit.imgs.data" style="background-image: url({{img.src}})"
+                                 class="form-thumbnail">
+                                <!-- 进度条 -->
+                                <div class="progress form-thumbnail-progress" ng-show="!({{img.progress}}==100)">
+                                    <div class="progress-bar progress-bar-success" role="progressbar"
+                                         style="width: {{img.progress}}%;">
+                                    </div>
+                                </div>
+                                <!-- 删除按钮 -->
+                                <i ng-click="appEdit.imgs.deleteById(img.id)"
+                                   class="form-thumbnail-delete icon ion-close"></i>
+                            </div>
+                            <!-- 上传按钮 -->
+                            <div class="form-thumbnail form-thumbnail-creat" ng-click="appEdit.clickUpload('upload3')">
+                                <input id="upload3" style="display: none;" type="file" file-model="myFile"
+                                       data-e="hidenUpload3"
+                                       accept="image/*"/>
+                                <i class="icon ion-upload"></i> 上传应用图片
+                                <a id="hidenUpload3" style="display: none;"
+                                   ng-click="appEdit.imgs.uploadFile('myFile', appEdit.imgs, false)"></a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-12 text-center" style="margin-top: 10px; margin-bottom: 10px;">
-                    <input id="upload3" style="display: none;" type="file" file-model="myFile" data-e="hidenUpload3"
-                           accept="image/*"/>
-                    <a class="btn btn-primary center-block" ng-click="appEdit.clickUpload('upload3')">上传应用图片</a>
-                    <a id="hidenUpload3" style="display: none;"
-                       ng-click="appEdit.imgs.uploadFile('myFile', appEdit.imgs, false)"></a>
-                </div>
-                <div ng-repeat="img in appEdit.imgs.data">
-                    <img ng-src="{{img.src}}" alt="{{img}}"/>
-                    进度： {{img.progress}}
-                    剩余： {{img.leftSize}}
-                    <a ng-click="appEdit.imgs.deleteById(img.id); ">
-                        删除
-                    </a>
-                </div>
+
                 <div class="form-group">
                     <label>大小：</label>
                     <input type="text" class="form-control" ng-model="appEdit.App.Size" disabled>
                 </div>
                 <div class="form-group">
                     <label>下载URL：</label>
-                    <input type="text" class="form-control" ng-model="appEdit.App.URL" disabled>
+                    <input type="text" class="form-control" ng-model="appEdit.App.URL" title="{{appEdit.App.URL}}"
+                           disabled>
                 </div>
                 <div class="form-group">
                     <label>评分：</label>
@@ -99,7 +130,9 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" ng-click="appEdit.cancel()">取消</button>
-            <button type="submit" class="btn btn-primary" form="appEditForm">保存</button>
+            <button type="submit" class="btn btn-primary" form="appEditForm"><i
+                    class="icon ion-ios-checkmark-outline"></i> 保存
+            </button>
         </div>
     </div>
 
