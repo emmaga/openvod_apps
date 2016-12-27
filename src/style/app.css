@@ -1,3 +1,8 @@
+body {
+    font-family: "Microsoft YaHei UI",PingHei,STHeitiSC-Light,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: #666;
+}
+
 .bg{
     position: absolute;
     top: -18px;
@@ -20,3 +25,40 @@
     background-color: rgba(90,90,90,.125);
     /*mix-blend-mode: darken;*/
 }
+
+/*modal*/
+.modal{
+    display: block;
+    overflow-y: auto;
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.modal.fade.in{
+    pointer-events: auto;
+}
+.modal-backdrop{
+    z-index: 0;
+    pointer-events: none;
+    height: 400%;
+}
+.modal-dialog{
+    margin: 72px auto;
+}
+.modal-content{
+    border: none;
+    -webkit-box-shadow: 0 5px 24px 8px rgba(0,0,0,.125);
+    box-shadow: 0 5px 24px 8px rgba(0,0,0,.125);
+}
+.modal-sm .modal-body{
+    padding: 15px;
+}
+/*.modal-body{*/
+    /*padding: 15px 30px;*/
+/*}*/
+.modal hr{
+    margin-left: -15px;
+    margin-right: -15px;
+}
+/*.modal-footer{*/
+    /*border-top: none;*/
+/*}*/

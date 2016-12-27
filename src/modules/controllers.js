@@ -33,11 +33,9 @@
                     }).then(function successCallback(response) {
                         var msg = response.data;
                         if (msg.rescode == '200') {
+                            util.setParams('userName', self.userName);
                             util.setParams('token', msg.token);
                             self.getEditLangs();
-                        } else if (msg.rescode == "401") {
-                            alert('访问超时，请重新登录');
-                            $state.go('login')
                         } else {
                             alert(msg.rescode + ' ' + msg.errInfo);
                         }
@@ -65,8 +63,8 @@
             }
         ])
 
-        .controller('appController', ['$http', '$scope', '$state', '$stateParams', 'util', 'CONFIG',
-            function ($http, $scope, $state, $stateParams, util, CONFIG) {
+        .controller('appController', ['$http', '$scope', '$state', '$stateParams', 'util',
+            function ($http, $scope, $state, $stateParams, util) {
                 var self = this;
                 self.init = function () {
                     self.loading = false;
@@ -76,6 +74,10 @@
                     } else {
                         self.goPage($state.current.name);
                     }
+
+                    // 弹窗层
+                    self.maskUrl = '';
+                    self.maskParams = {};
                 }
 
                 self.logout = function (event) {
@@ -664,8 +666,8 @@
                 /**
                  * 添加应用
                  */
-                self.goAppInfo = function (app) {
-                    $scope.app.maskParams = {'app': app};
+                self.goAppInfo = function (App) {
+                    $scope.app.maskParams = {'app': App};
                     $scope.app.showHideMask(true, 'pages/appEdit.html');
                 }
 
