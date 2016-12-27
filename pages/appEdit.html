@@ -35,7 +35,7 @@
                             <div ng-repeat="img in appEdit.logo.data" style="background-image: url({{img.src}})"
                                  class="form-thumbnail">
                                 <!-- 进度条 -->
-                                <div class="progress form-thumbnail-progress" ng-show="!({{img.progress}}==100)">
+                                <div class="progress form-thumbnail-progress" ng-show="!({{img.progress}} == 100)">
                                     <div class="progress-bar progress-bar-success" role="progressbar"
                                          style="width: {{img.progress}}%;">
                                     </div>
@@ -65,7 +65,7 @@
                             <div ng-repeat="img in appEdit.imgs.data" style="background-image: url({{img.src}})"
                                  class="form-thumbnail">
                                 <!-- 进度条 -->
-                                <div class="progress form-thumbnail-progress" ng-show="!({{img.progress}}==100)">
+                                <div class="progress form-thumbnail-progress" ng-show="!({{img.progress}} == 100)">
                                     <div class="progress-bar progress-bar-success" role="progressbar"
                                          style="width: {{img.progress}}%;">
                                     </div>
