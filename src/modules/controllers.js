@@ -244,12 +244,13 @@
         ])
 
         // 修改 第三方应用组 的应用 （全修改）
-        .controller('appsGroupInfoController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
-            function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
+        .controller('appsGroupInfoController', ['$http', '$scope', '$state', '$filter', '$stateParams', '$timeout', 'NgTableParams', 'util',
+            function ($http, $scope, $state, $filter, $stateParams, $timeout, NgTableParams, util) {
                 var self = this;
                 self.init = function () {
                     self.groupId = $stateParams.ID;
                     self.getGroupAppList();
+                    self.cannotSort = false;
                 }
 
                 /**
@@ -264,7 +265,7 @@
                             "ID": self.groupId,
                         }
                     })
-
+                    self.noData = false;
                     $http({
                         method: 'POST',
                         url: util.getApiUrl('appgroup', '', 'server'),
@@ -314,8 +315,14 @@
                     self.appList.splice(index, 1);
                 }
 
+                /**
+                 * 导入应用
+                 */
                 $scope.$on("importApps", function (event, msg) {
                     self.appList = msg;
+                    if (self.appList.length > 0) {
+                        self.noData = false;
+                    }
                 });
 
                 /**
@@ -323,14 +330,6 @@
                  */
                 self.save = function () {
                     self.saving = true;
-                    // var groupList = [];
-                    // for (var i = 0; i < self.appList.length; i++) {
-                    //     groupList.push({
-                    //         AppID: self.appList[i].AppID,
-                    //         Seq: self.appList[i].Seq,
-                    //         Param: self.appList[i].Param,
-                    //     })
-                    // }
                     var data = JSON.stringify({
                         action: "editGroupAppList",
                         token: util.getParams('token'),
@@ -359,6 +358,23 @@
                         self.saving = false;
                     });
                 }
+
+                /** 拖拽排序
+                 *   拖拽成功触发方法
+                 *   index 拖拽后落下时的元素的序号（下标）
+                 *   obj被拖动数据对象
+                 */
+                self.dropComplete = function (index, obj) {
+                    //重新排序
+                    var idx = self.appList.indexOf(obj);
+                    self.appList.splice(idx, 1);
+                    self.appList.splice(index, 0, obj);
+
+                    //修改seq
+                    for (var i = 0; i < self.appList.length; i++) {
+                        self.appList[i].Seq = i + 1;
+                    }
+                };
             }
         ])
 
@@ -707,12 +723,15 @@
                                         params.total(msg.data.appTotal);
                                         self.appList = msg.data.appList;
                                         for (var i = 0; i < self.maskParams.appList.length; i++) {
-                                            for (var j = self.appList.length - 1; j > 0; j--) {
+                                            for (var j = self.appList.length - 1; j >= 0; j--) {
                                                 if (self.appList[j].ID == self.maskParams.appList[i].AppID) {
-                                                    self.appList[j].splice(j, 1);
+                                                    self.appList.splice(j, 1);
                                                     break;
                                                 }
                                             }
+                                        }
+                                        if (self.appList.length == 0) {
+                                            self.noData = true;
                                         }
                                         return self.appList;
                                     } else if (msg.rescode == '401') {

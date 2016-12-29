@@ -16,25 +16,26 @@
         <!--</div>-->
     <!--</div>-->
     <div class="modal-body">
-        <h4>应用列表</h4>
-        <div class="right">
-            <button type="button" class="btn btn-primary" ng-click="appsGroupInfo.addApp()">添加</button>
-            <button type="submit" class="btn btn-primary" ng-click="appsGroupInfo.save()">保存</button>
+        <div class="modal-header">
+            <h4>应用列表</h4>
+            <div class="right">
+                <button type="button" class="btn btn-primary" ng-click="appsGroupInfo.addApp()">添加</button>
+                <button type="submit" class="btn btn-primary" ng-click="appsGroupInfo.save()">保存</button>
+            </div>
         </div>
+
         <div class="modal-body">
-            <ul>
-                <li ng-repeat="app in appsGroupInfo.appList track by $index">
-                    AppGroupID：{{app.AppGroupID}}
-                    <br> AppID：{{app.AppID}}
-                    <br> AppName：{{app.AppName}}
-                    <br> Seq：{{app.Seq}}
-                    <br> Param：<input type="text" ng-model="app.Param">
-                    <br><button type="button" class="btn btn-default" ng-click="appsGroupInfo.deleteApp($index)">删除</button>
+            <ul id="apps-group-list">
+                <li ng-drop="true" ng-drop-success="appsGroupInfo.dropComplete($index,$data)" ng-repeat="app in appsGroupInfo.appList track by $index" >
+                    <div ng-drag="true" ng-drag-data="app" draggable="true">
+                        {{app.Seq}} 应用名：{{app.AppName}} Param：<input type="text" ng-model="app.Param">
+                        <button type="button" class="btn btn-default" ng-click="appsGroupInfo.deleteApp($index)">删除</button>
+                    </div>
                 </li>
             </ul>
+            <div ng-show="appsGroupInfo.loading">Loading...</div>
+            <div ng-show="appsGroupInfo.noData">No Data</div>
         </div>
-        <div ng-show="appsGroupInfo.loading">Loading...</div>
-        <div ng-show="appsGroupInfo.deleting">Deleting...</div>
     </div>
 
 </div>

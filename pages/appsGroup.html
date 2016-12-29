@@ -1,18 +1,23 @@
 <div ng-controller="appsGroupController as appsGroup" ng-init="appsGroup.init()">
     <!-- 左侧菜单 -->
     <div class="nav-left col-lg-5">
-        <h3>应用组合列表</h3>
-        <button type="button" class="btn btn-primary" ng-click="appsGroup.addAppGroup()">添加应用组合</button>
-       
+        <div class="modal-header">
+            <h3>应用组合列表</h3>
+            <button type="button" class="btn btn-primary" ng-click="appsGroup.addAppGroup()">添加应用组合</button>
+        </div>
+
         <div ng-show="appsGroup.loading">loading...</div>
         <table ng-table="appsGroup.tableParams">
             <tbody>
-                <tr ng-repeat="appGroup in $data" ui-sref="app.appsGroup.appsGroupInfo({ID:appGroup.ID})">
-                    <td title="'名字'">{{appGroup.Name}}</td>
-                    <td title="'ID'">{{appGroup.ID}}</td>
-                    
-                    <td><button type="button" class="btn btn-default" ng-click="appsGroup.editAppGroup(appGroup)">编辑</button></td>
-                </tr>
+            <tr ng-repeat="appGroup in $data" ui-sref="app.appsGroup.appsGroupInfo({ID:appGroup.ID})">
+                <td class="col-md-3">{{appGroup.Name}}</td>
+                <td class="col-md-9">{{appGroup.Description}}</td>
+
+                <td>
+                    <button type="button" class="btn btn-default" ng-click="appsGroup.editAppGroup(appGroup)">编辑
+                    </button>
+                </td>
+            </tr>
             </tbody>
         </table>
         <div ng-show="appsGroup.noData">查无数据</div>

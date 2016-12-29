@@ -11,7 +11,8 @@
         'angular-md5',
         'ngCookies',
         'ngTable',
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'ngDraggable'
     ])
 
         .config(['$translateProvider', function ($translateProvider) {

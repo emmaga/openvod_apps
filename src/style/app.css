@@ -153,3 +153,13 @@ body {
     width: 100%;
     height: 100%;
 }
+
+/* 应用组的应用列表 */
+#apps-group-list {
+    padding: 0px;
+    list-style-type: none;
+}
+
+#apps-group-list li{
+    margin: 5px 0px;
+}

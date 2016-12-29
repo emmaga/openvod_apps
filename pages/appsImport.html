@@ -22,11 +22,12 @@
                 </tr>
                 </tbody>
             </table>
+            <div ng-show="appsImport.loading">Loading...</div>
+            <div ng-show="appsImport.noData">No Data</div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" ng-click="appsImport.cancel()">取消</button>
             <button type="button" class="btn btn-primary" ng-click="appsImport.import()"><i class="icon ion-ios-checkmark-outline"></i> 导入</button>
         </div>
-        <div ng-show="loading">Loading...</div>
     </div>
 </div>
