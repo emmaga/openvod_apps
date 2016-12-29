@@ -44,7 +44,7 @@
                     templateUrl: 'pages/groupAppList.html'
                 })
                 .state('app.appsGroup.appsGroupInfo', {
-                    url: '/appsGroupInfo?groupId',
+                    url: '/appsGroupInfo?ID',
                     templateUrl: 'pages/appsGroupInfo.html'
                 })
                 .state('app.appsWarehouse', {

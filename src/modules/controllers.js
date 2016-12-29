@@ -105,6 +105,11 @@
                     }
 
                 }
+
+                $scope.$on("exportApps", function (event, msg) {
+                    console.log(msg)
+                    $scope.$broadcast("importApps", msg);
+                })
             }
         ])
         
@@ -180,7 +185,6 @@
                         }
                     );
                 }
-
             }
         ])
 
@@ -233,10 +237,127 @@
                     });
                 }
 
-
-
                 self.cancel = function(){
                     $scope.app.showHideMask(false);
+                }
+            }
+        ])
+
+        // 修改 第三方应用组 的应用 （全修改）
+        .controller('appsGroupInfoController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
+            function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
+                var self = this;
+                self.init = function () {
+                    self.groupId = $stateParams.ID;
+                    self.getGroupAppList();
+                }
+
+                /**
+                 * 获取 第三方应用组 的应用列表
+                 */
+                self.getGroupAppList = function() {
+                    self.loading = true;
+                    var data = JSON.stringify({
+                        action: "getGroupAppList",
+                        token: util.getParams('token'),
+                        data: {
+                            "ID": self.groupId,
+                        }
+                    })
+
+                    $http({
+                        method: 'POST',
+                        url: util.getApiUrl('appgroup', '', 'server'),
+                        data: data
+                    }).then(function successCallback(response) {
+                        var msg = response.data;
+                        if (msg.rescode == '200') {
+                            if (msg.data.appList.length == 0) {
+                                self.noData = true;
+                                return;
+                            }
+                            self.appList = msg.data.appList;
+                        } else if (msg.rescode == '401') {
+                            alert('访问超时，请重新登录');
+                            $state.go('login');
+                        } else {
+                            alert('读取数据出错，' + msg.errInfo);
+                        }
+                    }, function errorCallback(response) {
+                        alert(response.status + ' 服务器出错');
+                    }).finally(function() {
+                        self.loading = false;
+                    });
+                }
+
+
+
+                //  修改 第三方应用组 的应用 （全修改）
+                self.editGroupAppList = function () {
+                    $scope.app.maskParams = {appList:self.appList || []}
+                    $scope.app.showHideMask(true, 'pages/editGroupAppList.html');
+                }
+
+                /**
+                 * 导入应用
+                 */
+                self.addApp = function () {
+                    $scope.app.maskParams = {appList:self.appList || [], ID: self.groupId};
+                    $scope.app.showHideMask(true, 'pages/appsImport.html');
+                }
+
+                /**
+                 * 删除应用
+                 * @param $index
+                 */
+                self.deleteApp = function (index) {
+                    self.appList.splice(index, 1);
+                }
+
+                $scope.$on("importApps", function (event, msg) {
+                    self.appList = msg;
+                });
+
+                /**
+                 * 保存列表
+                 */
+                self.save = function () {
+                    self.saving = true;
+                    // var groupList = [];
+                    // for (var i = 0; i < self.appList.length; i++) {
+                    //     groupList.push({
+                    //         AppID: self.appList[i].AppID,
+                    //         Seq: self.appList[i].Seq,
+                    //         Param: self.appList[i].Param,
+                    //     })
+                    // }
+                    var data = JSON.stringify({
+                        action: "editGroupAppList",
+                        token: util.getParams('token'),
+                        data: {
+                            ID: self.groupId,
+                            groupAppList: self.appList
+                        }
+                    })
+                    $http({
+                        method: 'POST',
+                        url: util.getApiUrl('appgroup', '', 'server'),
+                        data: data
+                    }).then(function successCallback(response) {
+                        var msg = response.data;
+                        if (msg.rescode == '200') {
+                            alert('保存成功');
+                        } else if (msg.rescode == '401') {
+                            alert('访问超时，请重新登录');
+                            $state.go('login');
+                        } else {
+                            alert('保存出错，' + msg.errInfo);
+                        }
+                    }, function errorCallback(response) {
+                        alert(response.status + ' 服务器出错');
+                    }).finally(function() {
+                        self.saving = false;
+                    });
                 }
             }
         ])
@@ -467,10 +588,6 @@
                     });
                 }
 
-
-
-
-
                 /**
                  * 获取应用列表
                  */
@@ -540,65 +657,101 @@
             }
         ])
 
-        .controller('appsGroupInfoController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
-            function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
-                var self = this;
-                self.init = function () {
-                    self.groupId = $stateParams.groupId;
-                }
-
-                /**
-                 * 添加应用
-                 */
-                self.addApp = function () {
-                    $scope.app.maskParams = {'groupId': self.groupId};
-                    $scope.app.showHideMask(true, 'pages/appsImport.html');
-                }
-
-                /**
-                 * 删除应用
-                 * @param appId
-                 */
-                self.deleteApp = function (appId) {
-                    if (confirm('确定删除该应用吗？')) {
-                        self.deleting = true;
-                        var data = JSON.stringify({
-                            appId: appId
-                        })
-                        $http({
-                            method: 'POST',
-                            url: util.getApiUrl('logon', '', 'server'),
-                            data: data
-                        }).then(function successCallback(response) {
-                            var msg = response.data;
-                            if (msg.rescode == '200') {
-
-                            } else if (msg.rescode == "401") {
-                                alert('访问超时，请重新登录');
-                                $state.go('login')
-                            } else {
-                                alert(msg.rescode + ' ' + msg.errInfo);
-                            }
-                        }, function errorCallback(response) {
-                            alert(response.status + ' 服务器出错');
-                        }).finally(function (value) {
-                            self.deleting = false;
-                        });
-                    }
-                }
-            }
-        ])
-
         .controller('appsImportController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
             function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
                 var self = this;
                 self.init = function () {
-                    self.groupId = $scope.app.maskParams.groupId;
+                    self.groupId = $scope.app.maskParams.ID;
+                    self.maskParams = $scope.app.maskParams;
+                    self.search();
                 }
 
                 self.cancel = function () {
                     $scope.app.showHideMask(false);
                 };
+
+                /**
+                 * 获取应用列表
+                 */
+                self.search = function () {
+                    self.tableParams = new NgTableParams(
+                        {
+                            page: 1,
+                            count: 10,
+                            url: ''
+                        },
+                        {
+                            counts: false,
+                            getData: function (params) {
+                                var paramsUrl = params.url();
+                                var searchName = "";
+                                if (self.searchName) {
+                                    searchName = self.searchName;
+                                }
+                                var data = JSON.stringify({
+                                    action: "getAppList",
+                                    token: util.getParams('token'),
+                                    page: Number(paramsUrl.page),
+                                    count: Number(paramsUrl.count)
+                                })
+                                self.loading = true;
+                                self.noData = false;
+
+                                return $http({
+                                    method: 'POST',
+                                    url: util.getApiUrl('app', '', 'server'),
+                                    data: data
+                                }).then(function successCallback(response) {
+                                    var msg = response.data;
+                                    if (msg.rescode == '200') {
+                                        params.total(msg.data.appTotal);
+                                        self.appList = msg.data.appList;
+                                        for (var i = 0; i < self.maskParams.appList.length; i++) {
+                                            for (var j = self.appList.length - 1; j > 0; j--) {
+                                                if (self.appList[j].ID == self.maskParams.appList[i].AppID) {
+                                                    self.appList[j].splice(j, 1);
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        return self.appList;
+                                    } else if (msg.rescode == '401') {
+                                        alert('访问超时，请重新登录');
+                                        $state.go('login');
+                                    } else {
+                                        alert('读取数据出错，' + msg.errInfo);
+                                    }
+                                }, function errorCallback(response) {
+                                    alert(response.status + ' 服务器出错');
+                                }).finally(function () {
+                                    self.loading = false;
+                                });
+                            }
+                        }
+                    );
+                }
+
+                /**
+                 * 导入应用
+                 */
+                self.import = function () {
+                    var seqNum = 1;
+                    for (var i = 0; i < self.appList.length; i++) {
+                        if (self.appList[i]['checked'] == true) {
+                            seqNum = self.maskParams.appList.length + 1;
+                            self.maskParams.appList.push({
+                                AppID: self.appList[i].ID,
+                                AppName: self.appList[i].Name,
+                                AppGroupID: Number(self.groupId),
+                                AppDescription: self.appList[i].Description,
+                                Seq: seqNum.toString(),
+                                Param: ""
+                            });
+                        }
+                    }
+                    $scope.$emit("exportApps", self.maskParams.appList);
+                    self.cancel();
+                }
             }
         ])
 

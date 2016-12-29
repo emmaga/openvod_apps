@@ -1,23 +1,30 @@
 <div ng-controller="editGroupAppListController as eGAL" ng-init="eGAL.init()">
-editGroupAppListController 修改 第三方应用组 的应用 （全修改）<br>
-<button ng-click="eGAL.cancel()">关闭</button>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" ng-click="eGAL.cancel()">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h5 class="modal-title ng-binding">修改 第三方应用组 的应用 （全修改）</h5>
+        </div>
+        <div class="modal-body">
+            <table ng-table="eGAL.tableParams">
+                <tbody>
+                <tr ng-repeat="app in $data track by $index">
+                    <td><input type="checkbox" name="" ng-model="eGAL.appList[$index].checked"
+                               ng-checked="eGAL.appList[$index].checked"></td>
+                    <td>Seq:<input type="number" name="" ng-required="eGAL.appList[$index].checked"
+                                   ng-model="eGAL.appList[$index].Seq"></td>
+                    <td>Param:<input type="text" name="" ng-required="eGAL.appList[$index].checked"
+                                     ng-model="eGAL.appList[$index].Param"></td>
+                    <td>{{app.Name}}</td>
+                    <td>大小：{{app.Size}}</td>
+                    <td>评分：<span uib-rating ng-model="app.ApkStar" max="5" read-only="true" aria-labelledby="default-rating" required></span></td>
 
-<table ng-table="eGAL.tableParams">
-    <tbody>
-        <tr ng-repeat="app in $data track by $index">
-            <td><input type="checkbox" name="" ng-model="eGAL.appList[$index].checked" ng-checked="eGAL.appList[$index].checked"></td>
-             <td>Seq:<input type="number" name="" ng-required="eGAL.appList[$index].checked" ng-model="eGAL.appList[$index].Seq" ></td>
-             <td>Param:<input type="text" name="" ng-required="eGAL.appList[$index].checked" ng-model="eGAL.appList[$index].Param" ></td>
-            <td>{{app.Name}}</td>
-            <td>大小：{{app.Size}}</td>
-            <td>评分：<span uib-rating ng-model="app.ApkStar" max="5" read-only="true"
-                         aria-labelledby="default-rating" required></span></td>
-            <td>地址：{{app.URL}}</td>
-            
-        </tr>
-         
-
-    </tbody>
-</table>
-<button class="btn btn-primary" ng-click="eGAL.editGroupAppList()" ng-disabled="eGAL.saving">保存</button>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <button class="btn btn-primary" ng-click="eGAL.editGroupAppList()" ng-disabled="eGAL.saving">保存</button>
+    </div>
 </div>

@@ -1,3 +1,32 @@
 <div ng-controller="appsImportController as appsImport" ng-init="appsImport.init()">
-    <div>11111</div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" ng-click="appsImport.cancel()">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h5 class="modal-title ng-binding">导入应用</h5>
+        </div>
+        <!--应用列表内容-->
+        <div class="panel-body">
+            <table ng-table="appsImport.tableParams">
+                <tbody>
+                <tr ng-repeat="app in $data">
+                    <td><input type="checkbox" ng-model="appsImport.appList[$index].checked" ng-checked="appsImport.appList[$index].checked"></td>
+                    <td>
+                        <div class="form-thumbnail" style="background-image: url({{app.LogoURL}})"></div>
+                    </td>
+                    <td>{{app.Name}}</td>
+                    <td>大小：{{app.Size}}</td>
+                    <td>评分：<span uib-rating ng-model="app.ApkStar" max="5" read-only="true" aria-labelledby="default-rating" required></span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="appsImport.cancel()">取消</button>
+            <button type="button" class="btn btn-primary" ng-click="appsImport.import()"><i class="icon ion-ios-checkmark-outline"></i> 导入</button>
+        </div>
+        <div ng-show="loading">Loading...</div>
+    </div>
 </div>
