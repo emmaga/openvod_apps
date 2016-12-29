@@ -1,19 +1,20 @@
-<div ng-controller="appsGroupController as appsGroup" ng-init="appsGroup.init()">
+<div ng-controller="appsGroupController as appsGroup" ng-init="appsGroup.init()" class="container">
+    <div class="page-header col-md-12">
+        <h3>应用组合列表</h3>
+    </div>
     <!-- 左侧菜单 -->
-    <div class="nav-left col-lg-5">
-        <div class="modal-header">
-            <h3>应用组合列表</h3>
-            <button type="button" class="btn btn-primary" ng-click="appsGroup.addAppGroup()">添加应用组合</button>
-        </div>
-
+    <div class="nav-left" ng-class="{'col-lg-5': appsGroup.isCollapsed, 'col-lg-12': !appsGroup.isCollapsed}">
         <div ng-show="appsGroup.loading">loading...</div>
-        <table ng-table="appsGroup.tableParams">
+        <a ng-click="appsGroup.addAppGroup()" class="button button-light ng-binding">
+            <i class="icon ion-ios-plus-outline"></i> 添加应用组合
+        </a>
+        <table ng-table="appsGroup.tableParams" class="appsGroup-table">
             <tbody>
-            <tr ng-repeat="appGroup in $data" ui-sref="app.appsGroup.appsGroupInfo({ID:appGroup.ID})">
-                <td class="col-md-3">{{appGroup.Name}}</td>
+            <tr ng-repeat="appGroup in $data" ui-sref="app.appsGroup.appsGroupInfo({ID:appGroup.ID})" ng-click="appsGroup.selectGroup()">
+                <td class="col-md-3 text-left">{{appGroup.Name}}</td>
                 <td class="col-md-9">{{appGroup.Description}}</td>
 
-                <td>
+                <td class="">
                     <button type="button" class="btn btn-default" ng-click="appsGroup.editAppGroup(appGroup)">编辑
                     </button>
                 </td>
@@ -24,5 +25,5 @@
     </div>
 
     <!-- 右侧 -->
-    <ui-view class="col-lg-7"></ui-view>
+    <ui-view class="col-lg-7" uib-collapse="isCollapsed"></ui-view>
 </div>

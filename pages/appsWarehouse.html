@@ -1,17 +1,20 @@
-<div ng-controller="appsWarehouseController as appsWarehouse" ng-init="appsWarehouse.init()">
+<div ng-controller="appsWarehouseController as appsWarehouse" ng-init="appsWarehouse.init()" class="container">
     <div>
         <!--应用列表头部-->
-        <div class="panel-heading">
+        <div class="modal-header">
             <h3>应用列表</h3>
-            <div>
-                <button type="button" class="btn btn-primary" ng-click="appsWarehouse.goAppInfo()">上传应用</button>
-            </div>
+            <!--<div>-->
+                <!--<button type="button" class="btn btn-primary" ng-click="appsWarehouse.goAppInfo()">上传应用</button>-->
+            <!--</div>-->
         </div>
         <!--应用列表内容-->
-        <div class="panel-body">
-            <table ng-table="appsWarehouse.tableParams">
+        <div class="modal-body">
+            <a ng-click="appsWarehouse.goAppInfo()" class="button button-light ng-binding">
+                <i class="icon ion-ios-plus-outline"></i> 添加应用
+            </a>
+            <table ng-table="appsWarehouse.tableParams" class="warehouse-table">
                 <tbody>
-                    <tr ng-repeat="app in $data">
+                    <tr ng-repeat="app in $data" class="well well-lg">
                         <td>
                             <div class="form-thumbnail" style="background-image: url({{app.LogoURL}})"></div>
                         </td>
@@ -19,9 +22,9 @@
                         <td>大小：{{app.Size}}</td>
                         <td>评分：<span uib-rating ng-model="app.ApkStar" max="5" read-only="true"
                                      aria-labelledby="default-rating" required></span></td>
-                        <td>
+                        <td class="text-right">
                             <button type="button" class="btn btn-default" ng-click="appsWarehouse.goAppInfo(app)">详情</button>
-                            <button type="button" class="btn btn-default" ng-click="appsWarehouse.appDelete(app.ID)">删除</button>
+                            <!--<button type="button" class="btn btn-default" ng-click="appsWarehouse.appDelete(app.ID)">删除</button>-->
                         </td>
                     </tr>
                 </tbody>

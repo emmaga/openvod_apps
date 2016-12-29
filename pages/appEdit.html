@@ -79,7 +79,7 @@
                                 <input id="upload3" style="display: none;" type="file" file-model="myFile"
                                        data-e="hidenUpload3"
                                        accept="image/*"/>
-                                <i class="icon ion-upload"></i> 上传应用图片
+                                <i class="icon ion-upload"></i> 上传图片
                                 <a id="hidenUpload3" style="display: none;"
                                    ng-click="appEdit.imgs.uploadFile('myFile', appEdit.imgs, false)"></a>
                             </div>
@@ -130,11 +130,10 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" ng-click="appEdit.cancel()">取消</button>
-            <button type="submit" class="btn btn-primary" form="appEditForm"><i
-                    class="icon ion-ios-checkmark-outline"></i> 保存
-            </button>
+            <button type="button" class="btn btn-danger" ng-click="appEdit.appDelete()" ng-disabled="appEdit.deleting"><i class="glyphicon glyphicon-trash"></i> 删除</button>
+            <button type="submit" class="btn btn-primary" form="appEditForm"><i class="icon ion-ios-checkmark-outline"></i> 保存</button>
         </div>
     </div>
-
+    <div ng-show="appEdit.deleting">Deleting...</div>
     <div ng-show="appEdit.saving">Saving...</div>
 </div>

@@ -9,10 +9,10 @@
         </div>
         <!--应用列表内容-->
         <div class="panel-body">
-            <table ng-table="appsImport.tableParams">
+            <table ng-table="appsImport.tableParams" class="app-import-table">
                 <tbody>
-                <tr ng-repeat="app in $data">
-                    <td><input type="checkbox" ng-model="appsImport.appList[$index].checked" ng-checked="appsImport.appList[$index].checked"></td>
+                <tr ng-repeat="app in $data" ng-click="appsImport.changeCurrents(app, $event)">
+                    <td><input class="" type="checkbox" ng-model="appsImport.appList[$index].checked" ng-checked="appsImport.appList[$index].checked"></td>
                     <td>
                         <div class="form-thumbnail" style="background-image: url({{app.LogoURL}})"></div>
                     </td>

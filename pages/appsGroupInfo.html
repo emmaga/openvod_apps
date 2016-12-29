@@ -1,35 +1,43 @@
 <div ng-controller="appsGroupInfoController as appsGroupInfo" ng-init="appsGroupInfo.init()">
     <!--<div class="modal-header">-->
-        <!--<h3>应用组合详情</h3>-->
-        <!--<div>-->
-            <!--<form id="editInfoForm" name="editInfoForm" novalidate ng-submit="addForm.$valid && editAppGroup.editAppGroup()" >-->
-                <!--<button type="submit" class="btn btn-primary">保存</button>-->
-                <!--<div class="form-group">-->
-                    <!--<label>应用组合名字：</label>-->
-                    <!--<input type="text" name="" ng-model="appsGroupInfo.groupInfo.Name" required>-->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!--<label>应用组合描述：</label>-->
-                    <!--<input type="text" name="" ng-model="appsGroupInfo.groupInfo.Description" required>-->
-                <!--</div>-->
-            <!--</form>-->
-        <!--</div>-->
+    <!--<h3>应用组合详情</h3>-->
+    <!--<div>-->
+    <!--<form id="editInfoForm" name="editInfoForm" novalidate ng-submit="addForm.$valid && editAppGroup.editAppGroup()" >-->
+    <!--<button type="submit" class="btn btn-primary">保存</button>-->
+    <!--<div class="form-group">-->
+    <!--<label>应用组合名字：</label>-->
+    <!--<input type="text" name="" ng-model="appsGroupInfo.groupInfo.Name" required>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+    <!--<label>应用组合描述：</label>-->
+    <!--<input type="text" name="" ng-model="appsGroupInfo.groupInfo.Description" required>-->
+    <!--</div>-->
+    <!--</form>-->
+    <!--</div>-->
     <!--</div>-->
     <div class="modal-body">
         <div class="modal-header">
             <h4>应用列表</h4>
-            <div class="right">
-                <button type="button" class="btn btn-primary" ng-click="appsGroupInfo.addApp()">添加</button>
+            <div class="pull-right">
+                <button type="button" class="btn btn-primary" ng-click="appsGroupInfo.addApp()">导入</button>
                 <button type="submit" class="btn btn-primary" ng-click="appsGroupInfo.save()">保存</button>
             </div>
         </div>
 
         <div class="modal-body">
             <ul id="apps-group-list">
-                <li ng-drop="true" ng-drop-success="appsGroupInfo.dropComplete($index,$data)" ng-repeat="app in appsGroupInfo.appList track by $index" >
-                    <div ng-drag="true" ng-drag-data="app" draggable="true">
-                        {{app.Seq}} 应用名：{{app.AppName}} Param：<input type="text" ng-model="app.Param">
-                        <button type="button" class="btn btn-default" ng-click="appsGroupInfo.deleteApp($index)">删除</button>
+                <li ng-drop="true" ng-drop-success="appsGroupInfo.dropComplete($index,$data)"
+                    ng-repeat="app in appsGroupInfo.appList track by $index">
+
+                    <div ng-drag="true" ng-drag-data="app" class="apps-group-list-item">
+                        <div class="panel-default panel">
+                            <div class="panel-heading">
+                                {{app.Seq}}. 应用名：{{app.AppName}} Param：<input type="text" ng-model="app.Param">
+                                <button type="button" class="close" data-dismiss="modal" ng-click="appsGroupInfo.deleteApp($index)">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </li>
             </ul>

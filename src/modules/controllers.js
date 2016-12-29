@@ -120,6 +120,9 @@
                
                 self.init = function () {
                     self.search();
+                    self.isNavCollapsed = true;
+                    self.isCollapsed = false;
+                    self.isCollapsedHorizontal = false;
                 }
 
                 /**
@@ -184,6 +187,12 @@
                             }
                         }
                     );
+                }
+
+                self.selectGroup = function () {
+                    if (self.isCollapsed == false) {
+                        self.isCollapsed = true;
+                    }
                 }
             }
         ])
@@ -346,6 +355,7 @@
                         var msg = response.data;
                         if (msg.rescode == '200') {
                             alert('保存成功');
+                            $state.go('appsGroup');
                         } else if (msg.rescode == '401') {
                             alert('访问超时，请重新登录');
                             $state.go('login');
@@ -474,204 +484,204 @@
         ])
 
         // 获取 第三方应用组 的应用列表
-        .controller('groupAppListController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
-            function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
-                console.log('groupAppListController')
-                console.log($scope.app.maskParams)
-                console.log($stateParams)
-                var self = this;
-               
-                self.init = function () {
-                    self.stateParams = $stateParams;
-                    // 提交表单 数据
-                    self.getGroupAppList();
-                }
-
-
-                /**
-                 * 获取 第三方应用组 的应用列表
-                 */
-                self.getGroupAppList = function() {
-                    self.loading = true;
-                    var data = JSON.stringify({
-                        action: "getGroupAppList",
-                        token: util.getParams('token'),
-                        data: {
-                            "ID": self.stateParams.ID - 0,
-                           
-                        }
-                    })
-
-                    $http({
-                        method: 'POST',
-                        url: util.getApiUrl('appgroup', '', 'server'),
-                        data: data
-                    }).then(function successCallback(response) {
-                        var msg = response.data;
-                        if (msg.rescode == '200') {
-                            if (msg.data.appList.length == 0) {
-                                self.noData = true;
-                                return;
-                            }
-                            self.appList = msg.data.appList;
-                        } else if (msg.rescode == '401') {
-                            alert('访问超时，请重新登录');
-                            $state.go('login');
-                        } else {
-                            alert('读取数据出错，' + msg.errInfo);
-                        }
-                    }, function errorCallback(response) {
-                        alert(response.status + ' 服务器出错');
-                    }).finally(function() {
-                        self.loading = false;
-                    });
-                }
-
-
-
-                //  修改 第三方应用组 的应用 （全修改）
-                self.editGroupAppList = function () {
-                    $scope.app.maskParams = {appList:self.appList || []}
-                    $scope.app.showHideMask(true, 'pages/editGroupAppList.html');
-                }
-
-                self.cancel = function(){
-                    $scope.app.showHideMask(false);
-                }
-            }
-        ])
+        // .controller('groupAppListController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
+        //     function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
+        //         console.log('groupAppListController')
+        //         console.log($scope.app.maskParams)
+        //         console.log($stateParams)
+        //         var self = this;
+        //
+        //         self.init = function () {
+        //             self.stateParams = $stateParams;
+        //             // 提交表单 数据
+        //             self.getGroupAppList();
+        //         }
+        //
+        //
+        //         /**
+        //          * 获取 第三方应用组 的应用列表
+        //          */
+        //         self.getGroupAppList = function() {
+        //             self.loading = true;
+        //             var data = JSON.stringify({
+        //                 action: "getGroupAppList",
+        //                 token: util.getParams('token'),
+        //                 data: {
+        //                     "ID": self.stateParams.ID - 0,
+        //
+        //                 }
+        //             })
+        //
+        //             $http({
+        //                 method: 'POST',
+        //                 url: util.getApiUrl('appgroup', '', 'server'),
+        //                 data: data
+        //             }).then(function successCallback(response) {
+        //                 var msg = response.data;
+        //                 if (msg.rescode == '200') {
+        //                     if (msg.data.appList.length == 0) {
+        //                         self.noData = true;
+        //                         return;
+        //                     }
+        //                     self.appList = msg.data.appList;
+        //                 } else if (msg.rescode == '401') {
+        //                     alert('访问超时，请重新登录');
+        //                     $state.go('login');
+        //                 } else {
+        //                     alert('读取数据出错，' + msg.errInfo);
+        //                 }
+        //             }, function errorCallback(response) {
+        //                 alert(response.status + ' 服务器出错');
+        //             }).finally(function() {
+        //                 self.loading = false;
+        //             });
+        //         }
+        //
+        //
+        //
+        //         //  修改 第三方应用组 的应用 （全修改）
+        //         self.editGroupAppList = function () {
+        //             $scope.app.maskParams = {appList:self.appList || []}
+        //             $scope.app.showHideMask(true, 'pages/editGroupAppList.html');
+        //         }
+        //
+        //         self.cancel = function(){
+        //             $scope.app.showHideMask(false);
+        //         }
+        //     }
+        // ])
 
         // 修改 第三方应用组 的应用 （全修改）
-        .controller('editGroupAppListController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
-            function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
-                console.log('editGroupAppListController')
-                console.log($scope.app.maskParams)
-                console.log($stateParams)
-                var self = this;
-               
-                self.init = function () {
-                    self.stateParams = $stateParams;
-                    self.maskParams = $scope.app.maskParams;
-                    self.getAppList();
-                }
-                
-                /**
-                 * 修改 第三方应用组 的应用 （全修改）
-                 */
-                self.editGroupAppList = function() {
-                    var groupAppList = [];
-                    for (var i = 0; i < self.appList.length; i++) {
-                        if (self.appList[i]['checked'] == true) {
-                            groupAppList.push({
-                                "AppID": self.appList[i].ID,
-                                "Seq": self.appList[i].Seq + '',
-                                "Param": self.appList[i].Param + ''
-                            })
-                        }
-
-                    }
-                    var data = JSON.stringify({
-                        action: "editGroupAppList",
-                        token: util.getParams('token'),
-                        data: {
-                            "ID": self.stateParams.ID - 0,
-                            "groupAppList": groupAppList
-                        }
-                    })
-
-                    self.saving = true;
-
-                    $http({
-                        method: 'POST',
-                        url: util.getApiUrl('appgroup', '', 'server'),
-                        data: data
-                    }).then(function successCallback(response) {
-                        var msg = response.data;
-                        if (msg.rescode == '200') {
-                            alert("编辑成功");
-                            self.cancel();
-                            $state.go($state.current, {}, { reload: true });
-                        } else if (msg.rescode == '401') {
-                            alert('访问超时，请重新登录');
-                            $location.path("pages/login.html");
-                        } else {
-                            alert('读取数据出错，' + msg.errInfo);
-                        }
-                    }, function errorCallback(response) {
-                        alert(response.status + ' 服务器出错');
-                    }).finally(function() {
-                        self.saving = false;
-                    });
-                }
-
-                /**
-                 * 获取应用列表
-                 */
-                self.getAppList = function () {
-                    self.tableParams = new NgTableParams(
-                        {
-                            page: 1,
-                            count: 15,
-                            url: ''
-                        },
-                        {
-                            counts: false,
-                            getData: function (params) {
-                                var paramsUrl = params.url();
-                                var searchName = "";
-                                if (self.searchName) {
-                                    searchName = self.searchName;
-                                }
-                                var data = JSON.stringify({
-                                    action: "getAppList",
-                                    token: util.getParams('token'),
-                                    page: Number(paramsUrl.page),
-                                    count: Number(paramsUrl.count)
-                                })
-                                self.loading = true;
-                                self.noData = false;
-
-                                return $http({
-                                    method: 'POST',
-                                    url: util.getApiUrl('app', '', 'server'),
-                                    data: data
-                                }).then(function successCallback(response) {
-                                    var msg = response.data;
-                                    if (msg.rescode == '200') {
-                                        params.total(msg.data.appTotal);
-                                        self.appList = msg.data.appList;
-                                        for (var i = 0; i < self.maskParams.appList.length; i++) {
-                                            for (var j = 0; j < self.appList.length; j++) {
-                                                if (self.appList[j].ID == self.maskParams.appList[i].AppID) {
-                                                    self.appList[j].checked = true;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        return self.appList;
-                                    } else if (msg.rescode == '401') {
-                                        alert('访问超时，请重新登录');
-                                        $location.path("pages/login.html");
-                                    } else {
-                                        alert('读取数据出错，' + msg.errInfo);
-                                    }
-                                }, function errorCallback(response) {
-                                    alert(response.status + ' 服务器出错');
-                                }).finally(function () {
-                                    self.loading = false;
-                                });
-                            }
-                        }
-                    );
-                }
-
-
-
-                self.cancel = function(){
-                    $scope.app.showHideMask(false);
-                }
-            }
-        ])
+        // .controller('editGroupAppListController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
+        //     function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
+        //         console.log('editGroupAppListController')
+        //         console.log($scope.app.maskParams)
+        //         console.log($stateParams)
+        //         var self = this;
+        //
+        //         self.init = function () {
+        //             self.stateParams = $stateParams;
+        //             self.maskParams = $scope.app.maskParams;
+        //             self.getAppList();
+        //         }
+        //
+        //         /**
+        //          * 修改 第三方应用组 的应用 （全修改）
+        //          */
+        //         self.editGroupAppList = function() {
+        //             var groupAppList = [];
+        //             for (var i = 0; i < self.appList.length; i++) {
+        //                 if (self.appList[i]['checked'] == true) {
+        //                     groupAppList.push({
+        //                         "AppID": self.appList[i].ID,
+        //                         "Seq": self.appList[i].Seq + '',
+        //                         "Param": self.appList[i].Param + ''
+        //                     })
+        //                 }
+        //
+        //             }
+        //             var data = JSON.stringify({
+        //                 action: "editGroupAppList",
+        //                 token: util.getParams('token'),
+        //                 data: {
+        //                     "ID": self.stateParams.ID - 0,
+        //                     "groupAppList": groupAppList
+        //                 }
+        //             })
+        //
+        //             self.saving = true;
+        //
+        //             $http({
+        //                 method: 'POST',
+        //                 url: util.getApiUrl('appgroup', '', 'server'),
+        //                 data: data
+        //             }).then(function successCallback(response) {
+        //                 var msg = response.data;
+        //                 if (msg.rescode == '200') {
+        //                     alert("编辑成功");
+        //                     self.cancel();
+        //                     $state.go($state.current, {}, { reload: true });
+        //                 } else if (msg.rescode == '401') {
+        //                     alert('访问超时，请重新登录');
+        //                     $location.path("pages/login.html");
+        //                 } else {
+        //                     alert('读取数据出错，' + msg.errInfo);
+        //                 }
+        //             }, function errorCallback(response) {
+        //                 alert(response.status + ' 服务器出错');
+        //             }).finally(function() {
+        //                 self.saving = false;
+        //             });
+        //         }
+        //
+        //         /**
+        //          * 获取应用列表
+        //          */
+        //         self.getAppList = function () {
+        //             self.tableParams = new NgTableParams(
+        //                 {
+        //                     page: 1,
+        //                     count: 15,
+        //                     url: ''
+        //                 },
+        //                 {
+        //                     counts: false,
+        //                     getData: function (params) {
+        //                         var paramsUrl = params.url();
+        //                         var searchName = "";
+        //                         if (self.searchName) {
+        //                             searchName = self.searchName;
+        //                         }
+        //                         var data = JSON.stringify({
+        //                             action: "getAppList",
+        //                             token: util.getParams('token'),
+        //                             page: Number(paramsUrl.page),
+        //                             count: Number(paramsUrl.count)
+        //                         })
+        //                         self.loading = true;
+        //                         self.noData = false;
+        //
+        //                         return $http({
+        //                             method: 'POST',
+        //                             url: util.getApiUrl('app', '', 'server'),
+        //                             data: data
+        //                         }).then(function successCallback(response) {
+        //                             var msg = response.data;
+        //                             if (msg.rescode == '200') {
+        //                                 params.total(msg.data.appTotal);
+        //                                 self.appList = msg.data.appList;
+        //                                 for (var i = 0; i < self.maskParams.appList.length; i++) {
+        //                                     for (var j = 0; j < self.appList.length; j++) {
+        //                                         if (self.appList[j].ID == self.maskParams.appList[i].AppID) {
+        //                                             self.appList[j].checked = true;
+        //                                             break;
+        //                                         }
+        //                                     }
+        //                                 }
+        //                                 return self.appList;
+        //                             } else if (msg.rescode == '401') {
+        //                                 alert('访问超时，请重新登录');
+        //                                 $location.path("pages/login.html");
+        //                             } else {
+        //                                 alert('读取数据出错，' + msg.errInfo);
+        //                             }
+        //                         }, function errorCallback(response) {
+        //                             alert(response.status + ' 服务器出错');
+        //                         }).finally(function () {
+        //                             self.loading = false;
+        //                         });
+        //                     }
+        //                 }
+        //             );
+        //         }
+        //
+        //
+        //
+        //         self.cancel = function(){
+        //             $scope.app.showHideMask(false);
+        //         }
+        //     }
+        // ])
 
         .controller('appsImportController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
             function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
@@ -771,6 +781,43 @@
                     $scope.$emit("exportApps", self.maskParams.appList);
                     self.cancel();
                 }
+
+                /**
+                 * 选择单个(取消选择单个)
+                 * @param current
+                 * @param $event
+                 */
+                self.changeCurrent = function(current, $event) {
+                    //计算已选数量 true加， false减
+                    self.count += current.checked ? 1 : -1;
+                    //判断是否全选，选数量等于数据长度为true
+                    self.selectAll = self.count === self.appList.length;
+                    //统计已选对象
+                    self.selectData = [];
+                    angular.forEach(self.datas, function(item) {
+                        if(item.checked){
+                            self.selectData[self.selectData.length] = item;
+                        }
+                    });
+
+
+                    $event.stopPropagation();//阻止冒泡
+
+                };
+
+                /**
+                 * 单击行选中
+                 * @param current
+                 * @param $event
+                 */
+                self.changeCurrents = function(current, $event) {
+                    if(current.checked == undefined){
+                        current.checked = true;
+                    }else{
+                        current.checked = !current.checked;
+                    }
+                    self.changeCurrent(current, $event);
+                };
             }
         ])
 
@@ -841,42 +888,6 @@
                 self.goAppInfo = function (App) {
                     $scope.app.maskParams = {'app': App};
                     $scope.app.showHideMask(true, 'pages/appEdit.html');
-                }
-
-                /**
-                 * 删除应用
-                 * @param ID
-                 */
-                self.appDelete = function (ID) {
-                    if(confirm('确认删除此应用吗？')) {
-                        self.deleting = true;
-                        var data = JSON.stringify({
-                            action: 'deleteApp',
-                            token: util.getParams('token'),
-                            data: {
-                                ID: ID
-                            }
-                        })
-                        $http({
-                            method: 'POST',
-                            url: util.getApiUrl('app', '', 'server'),
-                            data: data
-                        }).then(function successCallback(response) {
-                            var msg = response.data;
-                            if (msg.rescode == '200') {
-                                $state.reload();
-                            } else if (msg.rescode == '401') {
-                                alert('访问超时，请重新登录');
-                                $state.go('login');
-                            } else {
-                                alert('删除错误，' + msg.errInfo);
-                            }
-                        }, function errorCallback(response) {
-                            alert(response.status + ' 服务器出错');
-                        }).finally(function () {
-                            self.deleting = false;
-                        });
-                    }
                 }
             }
         ])
@@ -1219,6 +1230,41 @@
                                 xhr.abort();
                             }
                         );
+                    }
+                }
+
+                /**
+                 * 删除应用
+                 */
+                self.appDelete = function () {
+                    if(confirm('确认删除此应用吗？')) {
+                        self.deleting = true;
+                        var data = JSON.stringify({
+                            action: 'deleteApp',
+                            token: util.getParams('token'),
+                            data: {
+                                ID: self.App.ID
+                            }
+                        })
+                        $http({
+                            method: 'POST',
+                            url: util.getApiUrl('app', '', 'server'),
+                            data: data
+                        }).then(function successCallback(response) {
+                            var msg = response.data;
+                            if (msg.rescode == '200') {
+                                $state.reload();
+                            } else if (msg.rescode == '401') {
+                                alert('访问超时，请重新登录');
+                                $state.go('login');
+                            } else {
+                                alert('删除错误，' + msg.errInfo);
+                            }
+                        }, function errorCallback(response) {
+                            alert(response.status + ' 服务器出错');
+                        }).finally(function () {
+                            self.deleting = false;
+                        });
                     }
                 }
             }

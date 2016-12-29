@@ -154,12 +154,41 @@ body {
     height: 100%;
 }
 
-/* 应用组的应用列表 */
+/* 应用组合 */
+.appsGroup-table {
+    border-collapse:separate;
+    border-spacing:0px 10px;
+}
+
+.appsGroup-table tr {
+    cursor: pointer;
+}
 #apps-group-list {
     padding: 0px;
     list-style-type: none;
 }
 
 #apps-group-list li{
+    margin: 5px 0px;
+}
+
+.apps-group-list-item {
+    cursor: -webkit-grabbing;
+}
+
+.app-import-table {
+    width: 100%;
+    border-collapse:separate;
+    border-spacing:0px 10px;
+}
+
+/* 应用列表页面 */
+.warehouse-table {
+    width: 100%;
+    border-collapse:separate;
+    border-spacing:0px 10px;
+}
+
+.warehouse-table > tbody > tr {
     margin: 5px 0px;
 }
