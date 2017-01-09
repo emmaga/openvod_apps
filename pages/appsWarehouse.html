@@ -22,6 +22,7 @@
                         <td>大小：{{app.Size}}</td>
                         <td>评分：<span uib-rating ng-model="app.ApkStar" max="5" read-only="true"
                                      aria-labelledby="default-rating" required></span></td>
+                        <td>版本：{{app.ApkVersion}}</td>
                         <td class="text-right">
                             <button type="button" class="btn btn-default" ng-click="appsWarehouse.goAppInfo(app)">详情</button>
                             <!--<button type="button" class="btn btn-default" ng-click="appsWarehouse.appDelete(app.ID)">删除</button>-->
