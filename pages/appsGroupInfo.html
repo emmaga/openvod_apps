@@ -33,7 +33,7 @@
                         <div class="panel-default panel">
                             <div class="panel-heading">
                                 {{app.Seq}}. 应用名：{{app.AppName}} Param：<input type="text" ng-model="app.Param">
-                                <button type="button" class="close" data-dismiss="modal" ng-click="appsGroupInfo.deleteApp($index)">
+                                <button type="button" class="close" data-dismiss="modal" ng-click="appsGroupInfo.deleteApp(app.Seq)">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>

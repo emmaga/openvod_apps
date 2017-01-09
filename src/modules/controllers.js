@@ -329,8 +329,16 @@
                  * 删除应用
                  * @param $index
                  */
-                self.deleteApp = function (index) {
-                    self.appList.splice(index, 1);
+                self.deleteApp = function (Seq) {
+                    for (var i = 0; i < self.appList.length; i++) {
+                        if (self.appList[i].Seq == Seq) {
+                            self.appList.splice(i, 1);
+                            for (var j = 0; j < self.appList.length; j++) {
+                                self.appList[j].Seq = j + 1;
+                            }
+                            break;
+                        }
+                    }
                 }
 
                 /**
