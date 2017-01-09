@@ -982,7 +982,7 @@
                     }).then(function (response) {
                         var msg = response.data;
                         if (msg.rescode == '200') {
-                            var appId = response.data.AppID
+                            var appId =   response.data.AppID ? response.data.AppID : self.App.ID
                             var appIntroPicList = [];
                             for (var i = 0; i < self.imgs.data.length; i++) {
                                 appIntroPicList.push({
