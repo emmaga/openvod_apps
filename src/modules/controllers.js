@@ -315,6 +315,15 @@
                     $scope.app.maskParams = {appList:self.appList || [], ID: self.groupId};
                     $scope.app.showHideMask(true, 'pages/appsImport.html');
                 }
+                /**
+                 * 导入应用触发
+                 */
+                $scope.$on("importApps", function (event, msg) {
+                    self.appList = msg;
+                    if (self.appList.length > 0) {
+                        self.noData = false;
+                    }
+                });
 
                 /**
                  * 删除应用
@@ -323,16 +332,6 @@
                 self.deleteApp = function (index) {
                     self.appList.splice(index, 1);
                 }
-
-                /**
-                 * 导入应用
-                 */
-                $scope.$on("importApps", function (event, msg) {
-                    self.appList = msg;
-                    if (self.appList.length > 0) {
-                        self.noData = false;
-                    }
-                });
 
                 /**
                  * 保存列表
@@ -355,7 +354,7 @@
                         var msg = response.data;
                         if (msg.rescode == '200') {
                             alert('保存成功');
-                            $state.go('appsGroup');
+                            $state.reload();
                         } else if (msg.rescode == '401') {
                             alert('访问超时，请重新登录');
                             $state.go('login');

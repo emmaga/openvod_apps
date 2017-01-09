@@ -27,7 +27,7 @@
         <div class="modal-body">
             <ul id="apps-group-list">
                 <li ng-drop="true" ng-drop-success="appsGroupInfo.dropComplete($index,$data)"
-                    ng-repeat="app in appsGroupInfo.appList track by $index">
+                    ng-repeat="app in appsGroupInfo.appList | orderBy: 'Seq'">
 
                     <div ng-drag="true" ng-drag-data="app" class="apps-group-list-item">
                         <div class="panel-default panel">
