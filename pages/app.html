@@ -15,7 +15,13 @@
                 <li><a href="" ng-click="app.goPage('app.appsWarehouse')">应用库</a></li>
             </ul>
             <!--<div><button type="button" ng-click="app.logout()">登出</button></div>-->
-            <div ng-click="app.logout()" class="avatar" ng-class="{'blur':(app.showMaskClass)}" style="transition-duration: .33s"></div>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a ng-click="app.logout()">
+                        <i class="glyphicon glyphicon-lock"></i> 登出
+                    </a>
+                </li>
+            </ul>
         </div>
 
     </nav>

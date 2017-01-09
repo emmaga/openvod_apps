@@ -1042,6 +1042,7 @@
                 };
 
                 self.initApp = function (app) {
+                    app.progress = 100;
                     self.appFile = new file(app, true);
                     self.appFile.initFiles();
                 }

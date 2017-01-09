@@ -90,9 +90,25 @@ body {
 }
 
 .form-thumbnail-delete{
+     position: absolute;
+     right: -5px;
+     top: -5px;
+     width: 21px;
+     height: 21px;
+     border-radius: 14px;
+     background-color: #d9534f;
+     color: white;
+     text-align: center;
+     line-height: 21px;
+     font-size: 12px;
+     z-index: 1;
+ }
+.form-thumbnail-delete:hover{
+    background-color: #c9302c
+}
+
+.form-app-delete{
     position: absolute;
-    right: -5px;
-    top: -5px;
     width: 21px;
     height: 21px;
     border-radius: 14px;
@@ -103,7 +119,7 @@ body {
     font-size: 12px;
     z-index: 1;
 }
-.form-thumbnail-delete:hover{
+.form-app-delete:hover{
     background-color: #c9302c
 }
 

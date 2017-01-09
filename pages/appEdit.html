@@ -9,11 +9,13 @@
         </div>
         <div class="modal-body">
             <div ng-repeat="app in appEdit.appFile.data">
-                <uib-progressbar animate="false" value="dynamic" type="success"><b>{{app.progress}}%</b>
-                </uib-progressbar>
-                <a ng-click="appEdit.appFile.deleteById(app.id); ">
-                    删除
-                </a>
+                <div class="col-md-11">
+                    <uib-progressbar animate="false" class="progress-striped active" value="app.progress"
+                                     type="success"><b>{{app.progress}}%</b></uib-progressbar>
+                </div>
+                <!-- 删除按钮 -->
+                <i ng-click="appEdit.appFile.deleteById(app.id);"
+                   class="form-app-delete icon ion-close"></i>
             </div>
             <input id="upload" style="display: none;" type="file" file-model="myFile" data-e="hidenUpload"
                    accept=".apk"/>
@@ -130,8 +132,12 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" ng-click="appEdit.cancel()">取消</button>
-            <button type="button" class="btn btn-danger" ng-click="appEdit.appDelete()" ng-disabled="appEdit.deleting"><i class="glyphicon glyphicon-trash"></i> 删除</button>
-            <button type="submit" class="btn btn-primary" form="appEditForm"><i class="icon ion-ios-checkmark-outline"></i> 保存</button>
+            <button type="button" class="btn btn-danger" ng-click="appEdit.appDelete()" ng-disabled="appEdit.deleting">
+                <i class="glyphicon glyphicon-trash"></i> 删除
+            </button>
+            <button type="submit" class="btn btn-primary" form="appEditForm"><i
+                    class="icon ion-ios-checkmark-outline"></i> 保存
+            </button>
         </div>
     </div>
     <div ng-show="appEdit.deleting">Deleting...</div>

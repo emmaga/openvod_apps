@@ -8,7 +8,7 @@
             <h5 class="modal-title ng-binding">编辑应用组合详情</h5>
         </div>
         <div class="modal-body">
-            <form id="editForm" novalidate ng-submit="addForm.$valid && editAppGroup.editAppGroup()" name="editForm">
+            <form id="editForm" novalidate ng-submit="editForm.$valid && editAppGroup.editAppGroup()" name="editForm">
                 <div class="form-group">
                     <label>应用组合名字：</label>
                     <input type="text" class="form-control" ng-model="editAppGroup.form.Name" required>
