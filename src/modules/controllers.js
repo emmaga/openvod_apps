@@ -690,6 +690,7 @@
         //     }
         // ])
 
+        // 应用导入
         .controller('appsImportController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
             function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
                 var self = this;
@@ -837,6 +838,7 @@
             }
         ])
 
+        // 应用库列表
         .controller('appsWarehouseController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util',
             function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util) {
                 var self = this;
@@ -908,6 +910,7 @@
             }
         ])
 
+        // 添加或编辑应用
         .controller('appEditController', ['$http', '$scope', '$state', '$filter', '$stateParams', 'NgTableParams', 'util', 'CONFIG',
             function ($http, $scope, $state, $filter, $stateParams, NgTableParams, util, CONFIG) {
                 var self = this;

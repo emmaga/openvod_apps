@@ -196,6 +196,15 @@ input[type=checkbox], input[type=radio] {
     border-spacing:0px 10px;
 }
 
+.app-import-table th {
+    text-align: left;
+}
+
+.apps-list-img {
+    width: 40px;
+    height: 40px;
+}
+
 /* 应用列表页面 */
 .warehouse-table {
     width: 100%;

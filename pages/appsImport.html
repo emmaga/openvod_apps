@@ -12,13 +12,13 @@
             <table ng-table="appsImport.tableParams" class="app-import-table">
                 <tbody>
                 <tr ng-repeat="app in $data" ng-click="appsImport.changeCurrents(app, $event)">
-                    <td><input class="" type="checkbox" ng-model="appsImport.appList[$index].checked" ng-checked="appsImport.appList[$index].checked" ng-click="appsImport.stopPro($event)"></td>
-                    <td>
-                        <div class="form-thumbnail" style="background-image: url({{app.LogoURL}})"></div>
+                    <td title="'#'"><input class="" type="checkbox" ng-model="appsImport.appList[$index].checked" ng-checked="appsImport.appList[$index].checked" ng-click="appsImport.stopPro($event)"></td>
+                    <td title="'应用图'">
+                        <div class="form-thumbnail apps-list-img" style="background-image: url({{app.LogoURL}})"></div>
                     </td>
-                    <td>{{app.Name}}</td>
-                    <td>大小：{{app.Size}}</td>
-                    <td>评分：<span uib-rating ng-model="app.ApkStar" max="5" read-only="true" aria-labelledby="default-rating" required></span></td>
+                    <td title="'应用名'">{{app.Name}}</td>
+                    <td title="'大小'">{{app.Size}}</td>
+                    <td title="'评分'"><span uib-rating ng-model="app.ApkStar" max="5" read-only="true" aria-labelledby="default-rating" required></span></td>
                 </tr>
                 </tbody>
             </table>
