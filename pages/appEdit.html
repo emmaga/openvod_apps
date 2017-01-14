@@ -132,9 +132,10 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" ng-click="appEdit.cancel()">取消</button>
-            <button type="button" class="btn btn-danger" ng-click="appEdit.appDelete()" ng-disabled="appEdit.deleting">
+            <button type="button" class="btn btn-danger" ng-click="appEdit.appDelete()" ng-disabled="appEdit.deleting" ng-hide="appEdit.isAdd">
                 <i class="glyphicon glyphicon-trash"></i> 删除
             </button>
+
             <button type="submit" class="btn btn-primary" form="appEditForm"><i
                     class="icon ion-ios-checkmark-outline"></i> 保存
             </button>
