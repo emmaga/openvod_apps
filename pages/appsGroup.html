@@ -11,8 +11,8 @@
         <table ng-table="appsGroup.tableParams" class="appsGroup-table">
             <tbody>
             <tr ng-repeat="appGroup in $data" ui-sref="app.appsGroup.appsGroupInfo({ID:appGroup.ID})" ng-click="appsGroup.selectGroup()">
-                <td class="col-md-3 text-left">{{appGroup.Name}}</td>
-                <td class="col-md-9">{{appGroup.Description}}</td>
+                <td class="col-md-3 text-left" title="'组合名'">{{appGroup.Name}}</td>
+                <td class="col-md-9" title="'描述'">{{appGroup.Description}}</td>
 
                 <td class="">
                     <button type="button" class="btn btn-default" ng-click="appsGroup.editAppGroup(appGroup)">编辑
