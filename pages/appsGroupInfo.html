@@ -18,6 +18,7 @@
     <div class="modal-body">
         <div class="modal-header">
             <h4>应用列表</h4>
+            <small><i class="glyphicon glyphicon-info-sign"></i>&nbsp;温馨提示：拖动下列进行排序</small>
             <div class="pull-right">
                 <button type="button" class="btn btn-primary" ng-click="appsGroupInfo.addApp()">导入</button>
                 <button type="submit" class="btn btn-primary" ng-click="appsGroupInfo.save()">保存</button>
@@ -32,7 +33,7 @@
                     <div ng-drag="true" ng-drag-data="app" class="apps-group-list-item">
                         <div class="panel-default panel">
                             <div class="panel-heading">
-                                {{app.Seq}}. 应用名：{{app.AppName}} Param：<input type="text" ng-model="app.Param">
+                                {{app.Seq}}. 应用名：{{app.AppName}}
                                 <button type="button" class="close" data-dismiss="modal" ng-click="appsGroupInfo.deleteApp(app.Seq)">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
