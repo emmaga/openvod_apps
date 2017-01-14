@@ -145,7 +145,7 @@
                     self.tableParams = new NgTableParams(
                         {
                             page: 1,
-                            count: 15,
+                            count: 10,
                             url: ''
                         },
                         {
@@ -854,7 +854,7 @@
                     self.tableParams = new NgTableParams(
                         {
                             page: 1,
-                            count: 15,
+                            count: 10,
                             url: ''
                         },
                         {
