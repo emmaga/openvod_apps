@@ -818,13 +818,22 @@
                  * @param $event
                  */
                 self.changeCurrents = function(current, $event) {
+                    event.stopPropagation();
                     if(current.checked == undefined){
                         current.checked = true;
                     }else{
                         current.checked = !current.checked;
                     }
                     self.changeCurrent(current, $event);
+
                 };
+                /**
+                 * 阻止冒泡
+                 * @param event
+                 */
+                self.stopPro = function(event){
+                    event.stopPropagation();
+                }
             }
         ])
 
